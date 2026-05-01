@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.glass-clear {
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.52), rgba(219, 234, 254, 0.22)),
+    rgba(191, 219, 254, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 22px 70px rgba(30, 64, 175, 0.08);
+  backdrop-filter: blur(28px) saturate(160%);
+}
+
+.glass-opaque {
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(239, 246, 255, 0.5)),
+    rgba(219, 234, 254, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 18px 58px rgba(30, 64, 175, 0.08);
+  backdrop-filter: blur(30px) saturate(170%);
+}
+
+.glass-float {
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.84), rgba(219, 234, 254, 0.32)),
+    rgba(191, 219, 254, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 28px 90px rgba(30, 64, 175, 0.12);
+  backdrop-filter: blur(34px) saturate(180%);
+}
+
+.glass-lift {
+  --hover-tint: rgba(186, 230, 253, 0.32);
+  --hover-shadow: rgba(37, 99, 235, 0.13);
+  isolation: isolate;
+  overflow: hidden;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.glass-lift::before {
+  background:
+    radial-gradient(circle at 16% 12%, var(--hover-tint), transparent 58%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.32), transparent);
+  content: "";
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 220ms ease;
+  z-index: 0;
+}
+
+.glass-lift > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-lift:hover {
+  animation: none;
+  border-color: rgba(255, 255, 255, 0.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    -10px 12px 42px var(--hover-shadow),
+    0 28px 80px rgba(15, 23, 42, 0.08);
+  transform: translate3d(-5px, -5px, 0);
+}
+
+.glass-lift:hover::before {
+  opacity: 1;
+}
+
+.glass-lift:nth-child(4n + 1) {
+  --hover-tint: rgba(186, 230, 253, 0.34);
+  --hover-shadow: rgba(14, 165, 233, 0.14);
+}
+
+.glass-lift:nth-child(4n + 2) {
+  --hover-tint: rgba(191, 219, 254, 0.36);
+  --hover-shadow: rgba(59, 130, 246, 0.13);
+}
+
+.glass-lift:nth-child(4n + 3) {
+  --hover-tint: rgba(199, 210, 254, 0.32);
+  --hover-shadow: rgba(99, 102, 241, 0.11);
+}
+
+.glass-lift:nth-child(4n) {
+  --hover-tint: rgba(207, 250, 254, 0.3);
+  --hover-shadow: rgba(6, 182, 212, 0.12);
+}
+
+.system-grid {
+  background-image:
+    linear-gradient(rgba(37, 100, 235, 0.161) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 100, 235, 0.087) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: system-grid-drift 34s linear infinite;
+}
+
+.system-light-slow {
+  animation: system-light-slow 22s ease-in-out infinite alternate;
+}
+
+.system-light-fast {
+  animation: system-light-fast 16s ease-in-out infinite alternate;
+}
+
+.system-float {
+  animation: system-float 9s ease-in-out infinite alternate;
+}
+
+.system-card {
+  animation: system-card-rise 12s ease-in-out infinite alternate;
+}
+
+@keyframes system-grid-drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 80px 160px;
+  }
+}
+
+@keyframes system-light-slow {
+  from {
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(-47%, 28px, 0) scale(1.05);
+  }
+}
+
+@keyframes system-light-fast {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(-24px, -36px, 0) scale(1.04);
+  }
+}
+
+@keyframes system-float {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes system-card-rise {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .system-grid,
+  .system-light-slow,
+  .system-light-fast,
+  .system-float,
+  .system-card {
+    animation: none;
+  }
+}
