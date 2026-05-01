@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
+import Image from "next/image";
 
 type InspectionKey = "recruiter" | "professional" | "technical" | "personal" | "timeline";
 type HighlightTag =
@@ -26,6 +27,16 @@ type SystemNode =
   | "data"
   | "projects"
   | "experience";
+
+type FloatingShapeState = {
+  cycle: number;
+  durationMs: number;
+  leftPx: number;
+  topPx: number;
+  sizePx: number;
+  travelPx: number;
+  src: string;
+};
 
 const inspectionHighlights: Record<InspectionKey, HighlightTag[]> = {
   recruiter: ["summary", "impact", "experience"],
@@ -355,6 +366,7 @@ export default function Home() {
   const [activeInspection, setActiveInspection] = useState<InspectionKey | null>(null);
   const [activeNode, setActiveNode] = useState<SystemNode | null>(null);
   const [uptimeMinutes, setUptimeMinutes] = useState(0);
+  const [backgroundShapePngs, setBackgroundShapePngs] = useState<string[]>([]);
   const highlightedTags = activeInspection
     ? inspectionHighlights[activeInspection]
     : activeNode
@@ -373,9 +385,42 @@ export default function Home() {
     return () => window.clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    let mounted = true;
+
+    const loadShapePngs = async () => {
+      try {
+        const response = await fetch("/api/background-shapes", { cache: "no-store" });
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as { files?: string[] };
+        if (!mounted) {
+          return;
+        }
+
+        setBackgroundShapePngs(Array.isArray(data.files) ? data.files : []);
+      } catch {
+        if (mounted) {
+          setBackgroundShapePngs([]);
+        }
+      }
+    };
+
+    void loadShapePngs();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#f3f7fb] text-neutral-950">
-      <LayeredBackground activeInspection={activeInspection} />
+      <LayeredBackground
+        activeInspection={activeInspection}
+        backgroundShapePngs={backgroundShapePngs}
+      />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
         <header className="glass-opaque flex items-center justify-between gap-4 rounded-[28px] px-4 py-3 text-[13px] text-neutral-600 sm:rounded-full">
@@ -578,12 +623,138 @@ That’s what drives me. Now I work on systems that aim to help more people, inc
 
 function LayeredBackground({
   activeInspection,
+  backgroundShapePngs,
 }: {
   activeInspection: InspectionKey | null;
+  backgroundShapePngs: string[];
 }) {
+  const [shapeStates, setShapeStates] = useState<FloatingShapeState[]>([]);
+  const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+  const randomInt = (min: number, max: number) =>
+    Math.floor(randomInRange(min, max + 1));
+  const gapPx = 14;
+
+  const overlaps = (
+    a: { leftPx: number; topPx: number; sizePx: number; travelPx: number },
+    b: { leftPx: number; topPx: number; sizePx: number; travelPx: number },
+  ) => {
+    const aLeft = a.leftPx - gapPx;
+    const aRight = a.leftPx + a.sizePx + gapPx;
+    const aTop = a.topPx - gapPx;
+    const aBottom = a.topPx + a.sizePx + a.travelPx + gapPx;
+
+    const bLeft = b.leftPx - gapPx;
+    const bRight = b.leftPx + b.sizePx + gapPx;
+    const bTop = b.topPx - gapPx;
+    const bBottom = b.topPx + b.sizePx + b.travelPx + gapPx;
+
+    return aLeft < bRight && aRight > bLeft && aTop < bBottom && aBottom > bTop;
+  };
+
+  const pickPlacement = (
+    sizePx: number,
+    travelPx: number,
+    existing: FloatingShapeState[],
+    skipIndex: number | null,
+  ) => {
+    const viewportWidth = Math.max(320, window.innerWidth);
+    const viewportHeight = Math.max(320, window.innerHeight);
+    const maxLeft = Math.max(0, viewportWidth - sizePx);
+    const maxTop = Math.max(0, viewportHeight - sizePx - travelPx);
+    const candidates = existing.filter((_, idx) => idx !== skipIndex);
+
+    for (let attempt = 0; attempt < 120; attempt += 1) {
+      const leftPx = randomInRange(0, maxLeft);
+      const topPx = randomInRange(0, maxTop);
+      const candidate = { leftPx, topPx, sizePx, travelPx };
+      const hasOverlap = candidates.some((other) => overlaps(candidate, other));
+      if (!hasOverlap) {
+        return { leftPx, topPx };
+      }
+    }
+
+    // Fallback if dense: place anyway, but stay in-bounds.
+    return { leftPx: randomInRange(0, maxLeft), topPx: randomInRange(0, maxTop) };
+  };
+
+  const makeShapeState = (
+    src: string,
+    existing: FloatingShapeState[],
+    skipIndex: number | null,
+    cycle = 0,
+  ): FloatingShapeState => {
+    const durationMs = randomInt(10_000, 20_000);
+    const sizePx = randomInt(80, 200);
+    const travelPx = randomInt(40, 200);
+    const { leftPx, topPx } = pickPlacement(sizePx, travelPx, existing, skipIndex);
+    return {
+      src,
+      cycle,
+      durationMs,
+      leftPx,
+      topPx,
+      sizePx,
+      travelPx,
+    };
+  };
+
+  useEffect(() => {
+    if (backgroundShapePngs.length === 0) {
+      setShapeStates([]);
+      return;
+    }
+
+    const initialStates: FloatingShapeState[] = [];
+    backgroundShapePngs.forEach((src) => {
+      initialStates.push(makeShapeState(src, initialStates, null));
+    });
+    setShapeStates(initialStates);
+  }, [backgroundShapePngs]);
+
+  const handleShapeCycleEnd = (index: number, cycle: number) => {
+    setShapeStates((prev) => {
+      const current = prev[index];
+      if (!current || current.cycle !== cycle) {
+        return prev;
+      }
+
+      const updated = makeShapeState(current.src, prev, index, current.cycle + 1);
+      const copy = [...prev];
+      copy[index] = updated;
+      return copy;
+    });
+  };
+
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="system-grid absolute inset-0 opacity-70" />
+      <div className="system-shape-field absolute inset-0">
+        {shapeStates.map((shape, index) => {
+          return (
+            <Image
+              key={`${shape.src}-${index}-cycle-${shape.cycle}`}
+              src={shape.src}
+              alt=""
+              width={shape.sizePx}
+              height={shape.sizePx}
+              className="system-shape"
+              onAnimationEnd={() => handleShapeCycleEnd(index, shape.cycle)}
+              style={
+                {
+                  left: `${shape.leftPx}px`,
+                  top: `${shape.topPx}px`,
+                  width: `${shape.sizePx}px`,
+                  height: `${shape.sizePx}px`,
+                  "--shape-cycle-duration": `${shape.durationMs}ms`,
+                  "--shape-travel": `${shape.travelPx}px`,
+                } as CSSProperties
+              }
+              aria-hidden
+              unoptimized
+            />
+          );
+        })}
+      </div>
       <div
         className={`system-light-slow absolute left-1/2 top-[-8rem] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full blur-3xl transition-colors duration-700 ${
           activeInspection === "technical"
@@ -759,8 +930,7 @@ function UptimeBadge({ minutes }: { minutes: number }) {
           Self-hosted system
         </p>
         <p className="mt-2 text-[13px] leading-6 text-neutral-700">
-          This portfolio is self-hosted on my personal server, which is one of my
-          side hobbies and a way I keep learning infrastructure by running real
+          This portfolio is self-hosted on my personal server, which is one of my hobbies and a way I keep learning infrastructure by running real
           services.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
