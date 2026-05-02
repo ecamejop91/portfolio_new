@@ -1,0 +1,30 @@
+After making code changes, run these steps in order:
+
+1) Go to repo
+cd /home/elie/portfolio
+
+2) Check what changed
+git status
+
+3) Build-test
+npm run build
+
+4) Commit
+git add .
+git commit -m "your change summary"
+
+5) Push
+git push origin main
+
+6) Rebuild container
+docker build -t portfolio-site:latest .
+
+7) Restart deploy container
+docker rm -f portfolio || true
+docker run -d --name portfolio -p 22222:3000 portfolio-site:latest
+
+8) Verify live
+curl -I http://localhost:22222
+
+9) Open site and hard refresh browser
+Ctrl + Shift + R
