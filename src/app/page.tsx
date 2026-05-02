@@ -61,15 +61,15 @@ const inspections: Record<
     title: "Candidate snapshot",
     command: "scan /resume /impact /fit",
     summary:
-      "Computer Science student at Tennessee State University, GPA 3.9, anticipated graduation May 2027. Experience spans HCA Healthcare, Google STEP, Boston Scientific, and IT consulting.",
+      "Computer Science student at Tennessee State University, GPA 3.9. Expected graduation: May 2027. Experience across HCA Healthcare, Google STEP, Boston Scientific, and IT consulting.",
     sections: [
       {
         label: "Snapshot",
-        text: "CS student with backend, cloud, data, ML, Linux, Docker, Google Cloud, BigQuery, and Kafka experience.",
+        text: "A non-traditional computer science student with internship and project experience across big tech, healthcare, finance, and IT consulting. Comfortable working in corporate environments, cross-functional teams, and systems where reliability and communication matter.",
       },
       {
         label: "Impact",
-        text: "Built patient-data ML infrastructure at HCA, Fitbit service work at Google, and telehealth systems support across 15 countries.",
+        text: "Built patient-data Machine Learning infrastructure at HCA, supported Fitbit service operations at Google, and contributed to telehealth systems across 15 countries.",
       },
       {
         label: "Strengths",
@@ -335,10 +335,14 @@ const phases: {
 ];
 
 const overviewCards = [
-  ["Education", "B.S. Computer Science, TSU, GPA 3.9"],
   ["Graduation", "Anticipated May 2027"],
-  ["Recent role", "HCA Healthcare ITG Pathways Intern"],
-  ["Core stack", "Python, Kotlin, SQL, Linux, Docker, GCP"],
+  ["Current role", "Global Technology Intern, Bank of America"],
+  ["Core stack", "Python, SQL, Google Cloud, Docker, Linux"],
+];
+
+const snapshotProjects = [
+  ["Featured Work", "Sona AI interview platform", "View project ->"],
+  ["Current Build", "Local semantic document search", "View project ->"],
 ];
 
 const graphNodes: { key: SystemNode; label: string; tags: HighlightTag[] }[] = [
@@ -346,20 +350,13 @@ const graphNodes: { key: SystemNode; label: string; tags: HighlightTag[] }[] = [
   { key: "connector", label: "Connector", tags: ["connector", "values"] },
   { key: "engineering", label: "Engineering Mindset", tags: ["skills", "values"] },
   { key: "ai", label: "AI / ML", tags: ["skills", "stack"] },
+
   { key: "backend", label: "Backend", tags: ["skills", "stack"] },
   { key: "cloud", label: "Google Cloud", tags: ["skills", "stack"] },
   { key: "linux", label: "Linux / Docker", tags: ["skills", "persistence"] },
   { key: "data", label: "BigQuery / Kafka", tags: ["skills", "projects"] },
   { key: "projects", label: "Projects", tags: ["projects", "impact"] },
   { key: "experience", label: "Professional Experience", tags: ["experience", "impact"] },
-];
-
-const inspectionOrder: InspectionKey[] = [
-  "recruiter",
-  "professional",
-  "technical",
-  "personal",
-  "timeline",
 ];
 
 export default function Home() {
@@ -384,6 +381,10 @@ export default function Home() {
 
     return () => window.clearInterval(interval);
   }, []);
+
+  const scrollToId = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -416,26 +417,26 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#f3f7fb] text-neutral-950">
+    <main className="relative min-h-screen overflow-x-hidden bg-[#f3f7fb] text-neutral-950">
       <LayeredBackground
         activeInspection={activeInspection}
         backgroundShapePngs={backgroundShapePngs}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
+      <div className="page-zoom relative z-10 mx-auto w-full max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
         <header className="glass-opaque flex items-center justify-between gap-4 rounded-[28px] px-4 py-3 text-[13px] text-neutral-600 sm:rounded-full">
           <a href="#top" className="font-medium text-neutral-950">
             Eliecer Camejo
           </a>
           <nav className="hidden items-center gap-5 md:flex">
-            <a className="hover:text-neutral-950" href="#scan">
-              Scan
+            <a className="hover:text-neutral-950" href="#work">
+              Work
             </a>
             <a className="hover:text-neutral-950" href="#journey">
-              Timeline
+              Journey
             </a>
-            <a className="hover:text-neutral-950" href="#graph">
-              Graph
+            <a className="hover:text-neutral-950" href="#top">
+              Top
             </a>
           </nav>
         </header>
@@ -445,9 +446,9 @@ export default function Home() {
 
         <section
           id="top"
-          className="grid min-h-[calc(100vh-5.25rem)] items-center gap-8 py-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(21rem,0.95fr)]"
+          className="grid items-start gap-5 py-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(21rem,0.95fr)]"
         >
-          <div className="max-w-4xl">
+          <div className="mt-[100px] max-w-4xl">
             <p className="mb-5 text-[11px] font-medium uppercase tracking-[0.24em] text-neutral-500">
               Portfolio as a system map
             </p>
@@ -455,15 +456,14 @@ export default function Home() {
   Working on systems that improve people’s lives.
 </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-7 text-neutral-600 sm:text-base">
-              I started in IT, helping people use technology.
-That’s what drives me. Now I work on systems that aim to help more people, including systems used by thousands or even millions of people.
-            </p>
+              
+            My journey started in IT, where I helped people use technology directly, from small groups to hundreds of users. Through that experience, I realized that helping others is a strong driver for me. Now, I am in college acquiring the skills to positively impact as many people as possible by contributing to the companies and systems that shape our technological landscape at a global scale.</p>
 
             <div className="mt-7 grid gap-3 sm:grid-cols-3">
               {[
-                ["Mode", "Building"],
-                ["Focus", "Cloud ML systems"],
-                ["Principle", "Useful first"],
+                ["Current Stage", "CS student + engineer"],
+                ["Technical Direction", "AI, cloud, backend systems"],
+                ["Operating Principle", "Build useful systems"],
               ].map(([label, value]) => (
                 <StatusIndicator key={label} label={label} value={value} />
               ))}
@@ -479,13 +479,17 @@ That’s what drives me. Now I work on systems that aim to help more people, inc
               </button>
               <a
                 href="#journey"
+                onClick={(event) => {
+                  event.preventDefault();
+                  scrollToId("journey");
+                }}
                 className="inline-flex h-11 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/35 px-5 text-[13px] font-medium text-neutral-900 backdrop-blur-xl transition hover:bg-sky-50/65"
               >
                 Explore the system
               </a>
               <button
                 type="button"
-                onClick={() => setActiveInspection("technical")}
+                onClick={() => scrollToId("work")}
                 className="h-11 rounded-full border border-sky-900/10 bg-sky-50/25 px-5 text-[13px] font-medium text-neutral-900 backdrop-blur-xl transition hover:bg-sky-50/60"
               >
                 Technical work
@@ -493,73 +497,49 @@ That’s what drives me. Now I work on systems that aim to help more people, inc
             </div>
           </div>
 
-          <aside className="glass-float glass-lift system-float rounded-[28px] p-5">
+          <aside className="glass-float rounded-[20px] p-5 mt-[100px]">
             <div className="mb-4 flex items-center justify-between border-b border-neutral-950/8 pb-4">
-              <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
-                System snapshot
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-700">
+                At a Glance
               </p>
-              <span className="rounded-full border border-sky-900/10 bg-sky-50/45 px-3 py-1 text-[11px] font-medium text-neutral-700">
-                Available
-              </span>
             </div>
             <div className="space-y-3">
               {overviewCards.map(([label, value]) => (
                 <div
                   key={label}
-                  className={cardState(["summary", "skills"], highlightedTags)}
+                  className={snapshotCardState(["summary", "skills"], highlightedTags)}
                 >
                   <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
                     {label}
                   </span>
-                  <span className="text-[13px] leading-5 text-neutral-800">{value}</span>
+                  <span className="mt-1 block text-[13px] leading-5 text-neutral-950">
+                    {value}
+                  </span>
+                </div>
+              ))}
+              {snapshotProjects.map(([label, text, cta]) => (
+                <div
+                  key={label}
+                  className="rounded-[22px] border border-sky-900/12 bg-sky-50/28 p-3 backdrop-blur-2xl"
+                >
+                  <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                    {label}
+                  </span>
+                  <span className="mt-1 block text-[13px] leading-5 text-neutral-900">
+                    {text}
+                  </span>
+                  <span className="mt-2 inline-flex text-[11px] font-medium text-sky-700">
+                    {cta}
+                  </span>
                 </div>
               ))}
             </div>
           </aside>
         </section>
 
-        <section id="scan" className="scroll-mt-10 pb-14">
-          <div className="grid gap-6 lg:grid-cols-[0.78fr_1.22fr]">
-            <SectionIntro
-              eyebrow="Inspection layer"
-              title="Choose your depth"
-              text="Select a view and the system highlights the relevant experience, skills, values, and timeline signals underneath."
-            />
-            <div className="grid gap-3 sm:grid-cols-2">
-              {inspectionOrder.map((key) => {
-                const inspection = inspections[key];
-                const active = activeInspection === key;
-
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setActiveInspection(key)}
-                    className={`glass-lift rounded-[22px] border p-4 text-left backdrop-blur-2xl ${
-                      active
-                        ? "border-sky-900/20 bg-sky-50/75 shadow-[0_18px_55px_rgba(30,64,175,0.12)]"
-                        : "border-white/65 bg-sky-50/35 hover:bg-sky-50/60"
-                    }`}
-                  >
-                    <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-500">
-                      {inspection.eyebrow}
-                    </span>
-                    <h3 className="mt-3 text-[17px] font-semibold tracking-[-0.01em] text-neutral-950">
-                      {inspection.title}
-                    </h3>
-                    <p className="mt-2 text-[12px] leading-5 text-neutral-500">
-                      {inspection.command}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section id="journey" className="relative scroll-mt-10 py-8">
+        <section id="journey" className="relative scroll-mt-20 py-12 md:py-16">
           <div className="absolute left-4 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-neutral-950/20 to-transparent lg:left-[17.65rem] lg:block" />
-          <div className="mb-10 lg:ml-80">
+          <div className="mb-7 mt-[100px] lg:ml-80">
             <SectionIntro
               eyebrow="Timeline spine"
               title="Real stages, real systems"
@@ -567,7 +547,7 @@ That’s what drives me. Now I work on systems that aim to help more people, inc
             />
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {phases.map((phase) => (
               <PhaseSection
                 key={phase.id}
@@ -578,8 +558,8 @@ That’s what drives me. Now I work on systems that aim to help more people, inc
           </div>
         </section>
 
-        <section id="graph" className="scroll-mt-10 py-16">
-          <div className="grid gap-7 lg:grid-cols-[0.9fr_1.1fr]">
+        <section id="work" className="scroll-mt-20 py-12 md:py-16">
+          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <SectionIntro
               eyebrow="System graph"
               title="How the pieces connect"
@@ -739,6 +719,8 @@ function LayeredBackground({
               height={shape.sizePx}
               className="system-shape"
               onAnimationEnd={() => handleShapeCycleEnd(index, shape.cycle)}
+              loading="eager"
+              fetchPriority={index === 0 ? "high" : "auto"}
               style={
                 {
                   left: `${shape.leftPx}px`,
@@ -787,7 +769,7 @@ function PhaseSection({
   return (
     <article
       id={phase.id}
-      className="glass-clear relative grid min-h-[66vh] gap-6 rounded-[32px] p-5 lg:grid-cols-[17rem_1fr] lg:p-7"
+      className="glass-clear relative grid min-h-[34vh] gap-5 rounded-[32px] p-5 lg:min-h-[42vh] lg:grid-cols-[17rem_1fr] lg:p-7"
     >
       <div className="lg:sticky lg:top-8 lg:self-start">
         <div className="flex items-center gap-4">
@@ -968,21 +950,21 @@ function InspectionPanel({
       onClick={onClose}
     >
       <section
-        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[30px] border border-white/75 bg-sky-50/80 shadow-[0_35px_120px_rgba(30,64,175,0.2)] backdrop-blur-3xl"
+        className="max-h-[94vh] w-full max-w-5xl overflow-y-auto rounded-[30px] border border-white/75 bg-sky-50/80 shadow-[0_35px_120px_rgba(30,64,175,0.2)] backdrop-blur-3xl"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-5 border-b border-neutral-950/8 px-5 py-4">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
+            <p className="text-[13px] font-medium uppercase tracking-[0.2em] text-neutral-500">
               {panel.eyebrow}
             </p>
             <h2
               id="inspection-title"
-              className="mt-2 text-2xl font-semibold tracking-[-0.02em] text-neutral-950"
+              className="mt-2 text-4xl font-semibold tracking-[-0.02em] text-neutral-950"
             >
               {panel.title}
             </h2>
-            <p className="mt-2 text-[12px] leading-5 text-neutral-500">
+            <p className="mt-1 text-[14px] leading-6 text-neutral-500">
               {panel.command}
             </p>
           </div>
@@ -995,20 +977,39 @@ function InspectionPanel({
             x
           </button>
         </div>
-        <div className="space-y-5 p-5 sm:p-7">
-          <p className="text-[15px] leading-7 text-neutral-700">{panel.summary}</p>
+        <div className="space-y-6 p-7 sm:p-10">
+          <p className="text-[19px] leading-9 text-neutral-700">{panel.summary}</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {panel.sections.map((section) => (
               <div
                 key={section.label}
                 className="rounded-2xl border border-sky-900/8 bg-sky-50/45 p-4"
               >
-                <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-500">
+                <p className="text-[12px] font-medium uppercase tracking-[0.15em] text-neutral-500">
                   {section.label}
                 </p>
-                <p className="mt-3 text-[13px] leading-6 text-neutral-600">
-                  {section.text}
-                </p>
+                {panelKey === "recruiter" && section.label === "Contact" ? (
+                  <div className="mt-3 space-y-2 text-[17px] leading-8 text-neutral-600">
+                    <a
+                      href="mailto:ecamejop@my.tnstate.edu"
+                      className="block text-sky-800 hover:text-sky-900"
+                    >
+                      Email: ecamejop@my.tnstate.edu
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/eliecer-camejo"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block text-sky-800 hover:text-sky-900"
+                    >
+                      LinkedIn: /in/eliecer-camejo
+                    </a>
+                  </div>
+                ) : (
+                  <p className="mt-3 text-[17px] leading-8 text-neutral-600">
+                    {section.text}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -1026,6 +1027,16 @@ function cardState(cardTags: HighlightTag[], highlightedTags: HighlightTag[]) {
   const active = isHighlighted(cardTags, highlightedTags);
 
   return `glass-lift rounded-[22px] border p-4 backdrop-blur-2xl ${
+    active
+      ? "border-sky-900/18 bg-sky-50/78 shadow-[0_16px_50px_rgba(30,64,175,0.12)]"
+      : "border-white/65 bg-sky-50/32"
+  }`;
+}
+
+function snapshotCardState(cardTags: HighlightTag[], highlightedTags: HighlightTag[]) {
+  const active = isHighlighted(cardTags, highlightedTags);
+
+  return `rounded-[22px] border p-3 backdrop-blur-2xl ${
     active
       ? "border-sky-900/18 bg-sky-50/78 shadow-[0_16px_50px_rgba(30,64,175,0.12)]"
       : "border-white/65 bg-sky-50/32"
