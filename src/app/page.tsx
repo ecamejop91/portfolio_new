@@ -38,6 +38,57 @@ type FloatingShapeState = {
   src: string;
 };
 
+const foundationInsights: {
+  title: string;
+  text: string;
+  icon: "listen" | "system" | "dependable";
+  tags: HighlightTag[];
+}[] = [
+  {
+    title: "Listening before solving",
+    text: "Understanding what the client actually needed before deciding what the technical fix should be.",
+    icon: "listen",
+    tags: ["connector", "experience", "values"],
+  },
+  {
+    title: "Seeing the whole system",
+    text: "Working across devices, networks, software, workflows, and people instead of treating problems as isolated tickets.",
+    icon: "system",
+    tags: ["skills", "impact", "connector"],
+  },
+  {
+    title: "Becoming dependable",
+    text: "Building trust by following through, communicating clearly, and making technology easier for the people using it.",
+    icon: "dependable",
+    tags: ["persistence", "values", "experience"],
+  },
+];
+
+type StageCardIcon =
+  | "listen"
+  | "system"
+  | "dependable"
+  | "automation"
+  | "telehealth"
+  | "operations"
+  | "academics"
+  | "certification"
+  | "internship"
+  | "leadership"
+  | "engineering"
+  | "ml"
+  | "project"
+  | "future";
+
+type StageDetailItem = {
+  eyebrow: string;
+  title: string;
+  text: string;
+  tags: HighlightTag[];
+  icon: StageCardIcon;
+  tech?: string[];
+};
+
 const inspectionHighlights: Record<InspectionKey, HighlightTag[]> = {
   recruiter: ["summary", "impact", "experience"],
   professional: ["experience", "impact", "summary"],
@@ -185,7 +236,36 @@ const phases: {
     phase: "Foundation",
     title: "IT consulting as a systems foundation",
     summary:
-      "Telluride Bytes gave me the first layer of the map: evaluating business technology, modernizing legacy equipment, and learning how technical decisions affect daily work.",
+      "Years of IT support and network installation experience paved the way for my IT consulting role at Telluride Bytes. This role taught me the importance of carefully listening to clients and solving challenges holistically, beyond just software or hardware. It also shaped a client-first approach to my work, built on patience, trust, and clear communication. I learned to go the extra mile, build strong relationships, and become someone clients could rely on.",
+    unlocked: [
+      {
+        label: "Workflow thinking",
+        text: "Assisted businesses with IT solutions that optimized workflows, reduced costs, and improved compatibility.",
+        tags: ["experience", "impact", "connector"],
+      },
+      {
+        label: "Lifecycle ownership",
+        text: "Coordinated hardware upgrades, decommissioning, and strategic repurposing.",
+        tags: ["skills", "persistence"],
+      },
+    ],
+    cards: [
+      {
+        type: "Experience",
+        title: "Telluride Bytes",
+        text: "Information Technology Consultant supporting businesses through modernization and practical technical planning.",
+        tags: ["experience", "summary", "journey"],
+      },
+    ],
+  },
+  {
+    id: "foundation-structured",
+    number: "02",
+    date: "Aug 2020 - Mar 2021",
+    phase: "Foundation",
+    title: "IT consulting as a systems foundation",
+    summary:
+      "Years of IT support and network installation experience paved the way for my IT consulting role at Telluride Bytes. This role taught me the importance of carefully listening to clients and solving challenges holistically, beyond just software or hardware. It also shaped a client-first approach to my work, built on patience, trust, and clear communication. I learned to go the extra mile, build strong relationships, and become someone clients could rely on.",
     unlocked: [
       {
         label: "Workflow thinking",
@@ -209,7 +289,7 @@ const phases: {
   },
   {
     id: "systems",
-    number: "02",
+    number: "03",
     date: "Jun 2021 - Mar 2023",
     phase: "Systems",
     title: "Healthcare technology at human scale",
@@ -239,7 +319,7 @@ const phases: {
   },
   {
     id: "engineering",
-    number: "03",
+    number: "04",
     date: "2023 - May 2027",
     phase: "Computer Science Bachelors",
     title: "Scaling impact through computer science",
@@ -312,7 +392,7 @@ const phases: {
   },
   {
     id: "next",
-    number: "04",
+    number: "05",
     date: "Next chapter",
     phase: "Professional Path",
     title: "Growth, balance, and useful impact",
@@ -541,9 +621,9 @@ export default function Home() {
           <div className="absolute left-4 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-neutral-950/20 to-transparent lg:left-[17.65rem] lg:block" />
           <div className="mb-7 mt-[100px] lg:ml-80">
             <SectionIntro
-              eyebrow="Timeline spine"
-              title="Real stages, real systems"
-              text="The timeline is the structure of the page. Each phase unlocks related skills, projects, professional context, and personal philosophy."
+              eyebrow="My Timeline"
+              title="Experience Deep Dive"
+              text="A closer look at the roles, projects, and lessons that shaped my path."
             />
           </div>
 
@@ -766,98 +846,692 @@ function PhaseSection({
   phase: (typeof phases)[number];
   highlightedTags: HighlightTag[];
 }) {
+  if (phase.id === "foundation") {
+    return <FoundationStageCard phase={phase} highlightedTags={highlightedTags} />;
+  }
+
+  return <ThemedStageCard phase={phase} highlightedTags={highlightedTags} />;
+}
+
+function FoundationStageCard({
+  phase,
+  highlightedTags,
+}: {
+  phase: (typeof phases)[number];
+  highlightedTags: HighlightTag[];
+}) {
   return (
     <article
       id={phase.id}
-      className="glass-clear relative grid min-h-[34vh] gap-5 rounded-[32px] p-5 lg:min-h-[42vh] lg:grid-cols-[17rem_1fr] lg:p-7"
+      className="glass-clear relative overflow-hidden rounded-[32px] p-6 sm:p-8 lg:p-9"
     >
-      <div className="lg:self-start">
-        <div className="flex items-center gap-4">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/65 text-[12px] font-semibold text-neutral-900 shadow-sm">
-            {phase.number}
-          </span>
-          <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
-              {phase.phase}
-            </p>
-            <p className="mt-1 text-[12px] text-neutral-500">{phase.date}</p>
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(21rem,0.92fr)] lg:gap-10">
+        <div className="relative flex flex-col lg:pr-8">
+          <div className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/70 text-[13px] font-semibold text-neutral-900 shadow-sm">
+              {phase.number}
+            </span>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600">
+                {phase.phase}
+              </p>
+              <p className="mt-1 text-[13px] text-neutral-500">{phase.date}</p>
+            </div>
+          </div>
+
+          <h2 className="mt-8 max-w-2xl text-[2rem] font-semibold tracking-[-0.03em] text-neutral-950 sm:text-[2.35rem]">
+            {phase.title}
+          </h2>
+          <p className="mt-5 max-w-2xl text-[15px] leading-8 text-neutral-600">
+            {phase.summary}
+          </p>
+
+          <div className="mt-8 hidden lg:block lg:pt-6">
+            <StageArtwork stageId={phase.id} />
           </div>
         </div>
-        <h2 className="mt-5 text-2xl font-semibold tracking-[-0.02em] text-neutral-950 sm:text-3xl">
-          {phase.title}
-        </h2>
-        <p className="mt-3 text-[14px] leading-6 text-neutral-600">{phase.summary}</p>
-        {phase.metrics ? (
-          <div className="mt-5 grid gap-2">
-            {phase.metrics.map((metric) => (
+
+        <div className="lg:border-l lg:border-neutral-950/8 lg:pl-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-neutral-600">
+            What this stage unlocked
+          </p>
+
+          <div className="mt-6 space-y-4">
+            {foundationInsights.map((insight) => (
               <div
-                key={metric.label}
-                className="rounded-2xl border border-sky-900/8 bg-sky-50/35 p-3 backdrop-blur-2xl"
+                key={insight.title}
+                className={`glass-lift relative flex gap-4 rounded-[22px] border px-5 py-5 backdrop-blur-2xl ${
+                  isHighlighted(insight.tags, highlightedTags)
+                    ? "border-sky-900/18 bg-sky-50/78 shadow-[0_16px_50px_rgba(30,64,175,0.12)]"
+                    : "border-white/65 bg-sky-50/32"
+                }`}
               >
-                <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
-                  {metric.label}
-                </p>
-                <p className="mt-1 text-[13px] font-semibold text-neutral-950">
-                  {metric.value}
-                </p>
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-900/8 bg-sky-50/35 text-sky-700">
+                  <FoundationInsightIcon icon={insight.icon} />
+                </div>
+                <div className="pr-2">
+                  <h3 className="text-[17px] font-semibold tracking-[-0.01em] text-neutral-950">
+                    {insight.title}
+                  </h3>
+                  <p className="mt-2 text-[14px] leading-7 text-neutral-600">
+                    {insight.text}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-        ) : null}
-      </div>
-
-      <div className="space-y-4">
-        <div className="grid gap-3 md:grid-cols-2">
-          {phase.unlocked.map((item) => (
-            <div key={item.label} className={cardState(item.tags, highlightedTags)}>
-              <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-500">
-                Unlocks
-              </p>
-              <h3 className="mt-3 text-[16px] font-semibold text-neutral-950">
-                {item.label}
-              </h3>
-              <p className="mt-2 text-[13px] leading-6 text-neutral-600">{item.text}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className={phase.id === "engineering" ? "grid gap-3" : "grid gap-3 xl:grid-cols-2"}>
-          {phase.cards.map((card) => (
-            <div
-              key={card.title}
-              className={`${cardState(card.tags, highlightedTags)} system-card ${
-                phase.id === "engineering" ? "md:grid md:grid-cols-[12rem_1fr] md:gap-5" : ""
-              }`}
-            >
-              <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-500">
-                  {card.type}
-                </p>
-                <h3 className="mt-3 text-[18px] font-semibold tracking-[-0.01em] text-neutral-950">
-                  {card.title}
-                </h3>
-              </div>
-              <div className={phase.id === "engineering" ? "mt-3 md:mt-0" : ""}>
-                <p className="text-[13px] leading-6 text-neutral-600">{card.text}</p>
-              {card.tech ? (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {card.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-full border border-sky-900/8 bg-sky-50/35 px-3 py-1 text-[11px] text-neutral-600"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </article>
   );
+}
+
+function ThemedStageCard({
+  phase,
+  highlightedTags,
+}: {
+  phase: (typeof phases)[number];
+  highlightedTags: HighlightTag[];
+}) {
+  const detailItems = buildStageDetailItems(phase);
+
+  return (
+    <article
+      id={phase.id}
+      className="glass-clear relative overflow-hidden rounded-[32px] p-6 sm:p-8 lg:p-9"
+    >
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-10">
+        <div className="relative flex flex-col lg:pr-8">
+          <div className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/70 text-[13px] font-semibold text-neutral-900 shadow-sm">
+              {phase.number}
+            </span>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600">
+                {phase.phase}
+              </p>
+              <p className="mt-1 text-[13px] text-neutral-500">{phase.date}</p>
+            </div>
+          </div>
+
+          <h2 className="mt-8 max-w-2xl text-[2rem] font-semibold tracking-[-0.03em] text-neutral-950 sm:text-[2.35rem]">
+            {phase.title}
+          </h2>
+          <p className="mt-5 max-w-2xl text-[15px] leading-8 text-neutral-600">
+            return (
+              <article
+                id={phase.id}
+                className="glass-clear relative overflow-hidden rounded-[32px] p-6 sm:p-8 lg:p-9"
+              >
+                <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-10">
+                  <div className="relative flex flex-col lg:pr-8">
+                    <div className="flex items-start gap-4">
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/70 text-[13px] font-semibold text-neutral-900 shadow-sm">
+                        {phase.number}
+                      </span>
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600">
+                          {phase.phase}
+                        </p>
+                        <p className="mt-1 text-[13px] text-neutral-500">{phase.date}</p>
+                      </div>
+                    </div>
+
+                    <h2 className="mt-8 max-w-2xl text-[2rem] font-semibold tracking-[-0.03em] text-neutral-950 sm:text-[2.35rem]">
+                      {phase.title}
+                    </h2>
+                    <p className="mt-5 max-w-2xl text-[15px] leading-8 text-neutral-600">
+                      {phase.summary}
+                    </p>
+
+                    {phase.metrics ? (
+                      <div className="mt-6 grid gap-2 sm:max-w-xl sm:grid-cols-3">
+                        {phase.metrics.map((metric) => (
+                          <div
+                            key={metric.label}
+                            className="rounded-2xl border border-sky-900/8 bg-sky-50/35 p-3 backdrop-blur-2xl"
+                          >
+                            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                              {metric.label}
+                            </p>
+                            <p className="mt-1 text-[13px] font-semibold text-neutral-950">
+                              {metric.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    <div className="mt-8 hidden overflow-hidden lg:block lg:h-[220px]">
+                      <StageArtwork stageId={phase.id} />
+                    </div>
+                  </div>
+
+                  <div className="lg:border-l lg:border-neutral-950/8 lg:pl-8">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-neutral-600">
+                      What this stage unlocked
+                    </p>
+
+                    <div className="mt-6 space-y-4">
+                      {detailItems.map((item) => (
+                        <div
+                          key={`${phase.id}-${item.eyebrow}-${item.title}`}
+                          className={`glass-lift relative flex gap-4 rounded-[22px] border px-5 py-5 backdrop-blur-2xl ${
+                            isHighlighted(item.tags, highlightedTags)
+                              ? "border-sky-900/18 bg-sky-50/78 shadow-[0_16px_50px_rgba(30,64,175,0.12)]"
+                              : "border-white/65 bg-sky-50/32"
+                          }`}
+                        >
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-900/8 bg-sky-50/35 text-sky-700">
+                            <StageDetailIcon icon={item.icon} />
+                          </div>
+                          <div className="min-w-0 pr-2">
+                            <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-500">
+                              {item.eyebrow}
+                            </p>
+                            <h3 className="mt-2 text-[17px] font-semibold tracking-[-0.01em] text-neutral-950">
+                              {item.title}
+                            </h3>
+                            <p className="mt-2 text-[14px] leading-7 text-neutral-600">
+                              {item.text}
+                            </p>
+                            {item.tech ? (
+                              <div className="mt-4 flex flex-wrap gap-2">
+                                {item.tech.map((tech) => (
+                                  <span
+                                    key={tech}
+                                    className="rounded-full border border-sky-900/8 bg-white/55 px-2.5 py-1 text-[11px] text-neutral-600"
+                                  >
+                                    {tech}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+        text: "Managed 200+ telehealth devices across 15 countries, helping doctors reach remote and underserved regions.",
+        tags: ["experience", "impact", "values"],
+        icon: "telehealth",
+      },
+      {
+        eyebrow: "Experience",
+        title: "Boston Scientific",
+        text: "System Administrator; increased company-wide tech utilization by about 60% through user training redesign.",
+        tags: ["experience", "impact", "connector"],
+        icon: "operations",
+        tech: ["Python", "Device management", "Training", "Telehealth"],
+      },
+    ];
+  }
+
+  if (phase.id === "engineering") {
+    return [
+      {
+        eyebrow: "Unlocks",
+        title: "Academic foundation",
+        text: "B.S. Computer Science, GPA 3.9, anticipated graduation May 2027.",
+        tags: ["summary", "journey", "persistence"],
+        icon: "academics",
+      },
+      {
+        eyebrow: "Unlocks",
+        title: "Certifications",
+        text: "Certified Scrum Master & Product Owner, May 2022; Stanford-Coursera Supervised Machine Learning, Feb 2024.",
+        tags: ["skills", "stack", "values"],
+        icon: "certification",
+      },
+      {
+        eyebrow: "Unlocks",
+        title: "Corporate exposure",
+        text: "Internship experiences opened access to how large organizations build, maintain, and improve systems at scale.",
+        tags: ["experience", "impact", "connector"],
+        icon: "internship",
+      },
+      {
+        eyebrow: "Leadership",
+        title: "TSU Career Center",
+        text: "Served as Student Ambassador from 2024 to 2025.",
+        tags: ["experience", "connector", "values"],
+        icon: "leadership",
+      },
+      {
+        eyebrow: "Experience",
+        title: "Google STEP Intern",
+        text: "May-Aug 2024. Developed a Kotlin RPC service for Fitbit Account Services, contributed to microservices migration, updated invitations and notifications, and wrote tests achieving over 90% code coverage.",
+        tags: ["experience", "impact", "stack"],
+        icon: "engineering",
+        tech: ["Kotlin", "RPC", "JavaScript", "HTML", "Unit tests"],
+      },
+      {
+        eyebrow: "Experience",
+        title: "HCA Healthcare ITG Pathways Intern",
+        text: "May-Aug 2025. Prototyped ML pipelines with Google Cloud, Vertex AI, and BigQuery; built a Python Kafka consumer streaming about 12 million patient records daily for model training.",
+        tags: ["experience", "impact", "summary"],
+        icon: "ml",
+        tech: ["Python", "Kafka", "Google Cloud", "Vertex AI", "BigQuery", "Kubernetes", "Argo CD"],
+      },
+      {
+        eyebrow: "Project",
+        title: "Fisk & TSU Google Hackathon",
+        text: "Developed a web platform to connect colleges with businesses.",
+        tags: ["projects", "connector", "impact"],
+        icon: "project",
+        tech: ["Web platform", "Product thinking", "Collaboration"],
+      },
+      {
+        eyebrow: "Direction",
+        title: "AI-enabled systems with human value",
+        text: "The next layer is deeper backend, cloud, data, and ML work where technical systems improve outcomes people can feel.",
+        tags: ["values", "connector", "journey"],
+        icon: "future",
+      },
+    ];
+  }
+
+  return [
+    {
+      eyebrow: "Unlocks",
+      title: "Professional fit",
+      text: "A role where backend, cloud, data, and AI systems can improve services at meaningful scale.",
+      tags: ["values", "impact", "connector"],
+      icon: "future",
+    },
+    {
+      eyebrow: "Unlocks",
+      title: "Growth conditions",
+      text: "A team and environment aligned with learning, execution, balance, and durable contribution.",
+      tags: ["journey", "persistence", "values"],
+      icon: "dependable",
+    },
+  ];
+}
+
+function FoundationInsightIcon({ icon }: { icon: "listen" | "system" | "dependable" }) {
+  if (icon === "listen") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M8 10.5a4 4 0 1 1 8 0c0 4.3-2 5.1-2 7.2a2 2 0 0 1-4 0" />
+        <path d="M9.7 20.2c.4 1 1.3 1.8 2.3 1.8s1.9-.8 2.3-1.8" />
+        <path d="M5 11.2c0-3.9 3.1-7.2 7-7.2" />
+      </svg>
+    );
+  }
+
+  if (icon === "system") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="3.5" y="4" width="6" height="6" rx="1.2" />
+        <rect x="14.5" y="4" width="6" height="6" rx="1.2" />
+        <rect x="9" y="14" width="6" height="6" rx="1.2" />
+        <path d="M9.5 7h5M12 10v4" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3.5l6 2.6v5.6c0 4-2.4 7.4-6 8.8-3.6-1.4-6-4.8-6-8.8V6.1l6-2.6Z" />
+      <path d="m9.5 12 1.8 1.8 3.2-3.6" />
+    </svg>
+  );
+}
+
+function StageDetailIcon({ icon }: { icon: StageCardIcon }) {
+  if (icon === "listen" || icon === "system" || icon === "dependable") {
+    return <FoundationInsightIcon icon={icon} />;
+  }
+
+  if (icon === "automation") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M12 3v4M12 17v4M4 12H8M16 12h4" />
+        <path d="m6.2 6.2 2.8 2.8M15 15l2.8 2.8M17.8 6.2 15 9M9 15l-2.8 2.8" />
+        <circle cx="12" cy="12" r="3.5" />
+      </svg>
+    );
+  }
+
+  if (icon === "telehealth") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="4" y="5" width="16" height="12" rx="2" />
+        <path d="M9 21h6M12 17v4M8.5 11.5h7" />
+        <path d="M12 8v7" />
+      </svg>
+    );
+  }
+
+  if (icon === "operations") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="4" y="4" width="7" height="7" rx="1.2" />
+        <rect x="13" y="4" width="7" height="7" rx="1.2" />
+        <rect x="8.5" y="13" width="7" height="7" rx="1.2" />
+        <path d="M11 7.5h2M12 11v2" />
+      </svg>
+    );
+  }
+
+  if (icon === "academics") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="m3 9 9-4 9 4-9 4-9-4Z" />
+        <path d="M7 10.8V15c0 1.3 2.2 2.5 5 2.5s5-1.2 5-2.5v-4.2" />
+      </svg>
+    );
+  }
+
+  if (icon === "certification") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="9" r="4" />
+        <path d="M10 13.5 8 21l4-2.3L16 21l-2-7.5" />
+      </svg>
+    );
+  }
+
+  if (icon === "internship") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="4" y="6" width="16" height="12" rx="2" />
+        <path d="M9 6V4h6v2M4 11h16" />
+      </svg>
+    );
+  }
+
+  if (icon === "leadership") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M12 4 14.1 8.2 19 8.8l-3.6 3.4.9 4.8L12 14.8 7.7 17l.9-4.8L5 8.8l4.9-.6L12 4Z" />
+      </svg>
+    );
+  }
+
+  if (icon === "engineering") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13 5l-2 14" />
+      </svg>
+    );
+  }
+
+  if (icon === "ml") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="6" cy="12" r="2" />
+        <circle cx="18" cy="6" r="2" />
+        <circle cx="18" cy="18" r="2" />
+        <path d="M8 12h4M14 12l2.3-4M14 12l2.3 4" />
+      </svg>
+    );
+  }
+
+  if (icon === "project") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="3.5" y="5" width="17" height="14" rx="2" />
+        <path d="M8 9h8M8 13h5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 19c6-1.5 9.8-5.3 11.8-11.5" />
+      <path d="M13 7h4v4" />
+      <path d="M4 19h16" />
+    </svg>
+  );
+}
+
+function StageIllustration({ stageId }: { stageId: string }) {
+  if (stageId === "systems") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 420 140"
+        className="h-[120px] w-full max-w-[360px] text-sky-200/55"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M18 112h384" />
+        <path d="M36 112V54" />
+        <path d="M36 58c10 0 16 6 16 14 0 6-4 9-8 12-4 3-8 6-8 12" />
+        <path d="M30 66c2-4 6-6 10-6 5 0 8 3 8 7 0 3-2 5-5 7-3 2-7 5-7 10" />
+        <path d="M28 78h16" />
+        <path d="M28 88h16" />
+
+        <circle cx="178" cy="67" r="23" />
+        <path d="M164 66c3-5 8-8 14-8s11 3 14 8" />
+        <path d="M167 66c0 2 1 3 3 3s3-1 3-3-1-3-3-3-3 1-3 3Z" />
+        <path d="M183 66c0 2 1 3 3 3s3-1 3-3-1-3-3-3-3 1-3 3Z" />
+        <path d="M170 64h10M180 64h10" />
+        <path d="M168 79c4 4 16 4 20 0" />
+        <path d="M164 79c2 10 8 15 14 15s12-5 14-15" />
+        <path d="M167 79h22" />
+
+        <path d="M236 82h20l6-10 8 20 8-12h12l8-10 6 12h18" />
+        <path d="M232 96h96" />
+
+        <rect x="338" y="56" width="46" height="34" rx="6" />
+        <path d="M350 68h22M361 58v22" />
+        <path d="M344 98h34" />
+      </svg>
+    );
+  }
+
+  if (stageId === "engineering") {
+    return (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 420 140"
+        className="h-[120px] w-full max-w-[360px] text-sky-200/55"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M18 112h384" />
+        <path d="M34 112V78h46v34" />
+        <path d="M58 54 88 78H28l30-24Z" />
+        <path d="M47 90h6M63 90h6" />
+        <rect x="142" y="74" width="82" height="24" rx="5" />
+        <path d="M154 98h58M166 74V62h34v12" />
+        <path d="m258 92 22-20 20 10 28-24" />
+        <path d="M324 58h12v12" />
+        <path d="M310 112h34" />
+        <circle cx="310" cy="84" r="5" />
+        <circle cx="346" cy="76" r="5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 420 140"
+      className="h-[120px] w-full max-w-[360px] text-sky-200/55"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 112h384" />
+      <path d="M34 112 92 72l30 26 18-14 34 28" />
+      <path d="M210 112c10-26 28-40 50-40 16 0 29 7 42 22" />
+      <path d="m292 56 24-2-2 24" />
+      <path d="M230 112h86" />
+      <circle cx="354" cy="70" r="10" />
+      <path d="M354 60v20M344 70h20" />
+    </svg>
+  );
+}
+
+function StageArtwork({ stageId }: { stageId: string }) {
+  if (stageId === "foundation" || stageId === "foundation-structured") {
+    return (
+      <Image
+        src="/Art/Telluride.png"
+        alt=""
+        width={720}
+        height={2}
+        className="block h-full w-auto max-w-none opacity-30"
+        aria-hidden
+      />
+    );
+  }
+
+  if (stageId === "systems") {
+    return (
+      <Image
+        src="/Art/Boston.png"
+        alt=""
+        width={720}
+        height={280}
+        className="h-auto w-full max-w-2xl object-contain opacity-30"
+        aria-hidden
+      />
+    );
+  }
+
+  return <StageIllustration stageId={stageId} />;
 }
 
 function SectionIntro({
