@@ -958,103 +958,105 @@ function ThemedStageCard({
             {phase.title}
           </h2>
           <p className="mt-5 max-w-2xl text-[15px] leading-8 text-neutral-600">
-            return (
-              <article
-                id={phase.id}
-                className="glass-clear relative overflow-hidden rounded-[32px] p-6 sm:p-8 lg:p-9"
+            {phase.summary}
+          </p>
+
+          {phase.metrics ? (
+            <div className="mt-6 grid gap-2 sm:max-w-xl sm:grid-cols-3">
+              {phase.metrics.map((metric) => (
+                <div
+                  key={metric.label}
+                  className="rounded-2xl border border-sky-900/8 bg-sky-50/35 p-3 backdrop-blur-2xl"
+                >
+                  <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                    {metric.label}
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold text-neutral-950">
+                    {metric.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="mt-8 hidden overflow-hidden lg:block lg:h-[220px]">
+            <StageArtwork stageId={phase.id} />
+          </div>
+        </div>
+
+        <div className="lg:border-l lg:border-neutral-950/8 lg:pl-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-neutral-600">
+            What this stage unlocked
+          </p>
+
+          <div className="mt-6 space-y-4">
+            {detailItems.map((item) => (
+              <div
+                key={`${phase.id}-${item.eyebrow}-${item.title}`}
+                className={`glass-lift relative flex gap-4 rounded-[22px] border px-5 py-5 backdrop-blur-2xl ${
+                  isHighlighted(item.tags, highlightedTags)
+                    ? "border-sky-900/18 bg-sky-50/78 shadow-[0_16px_50px_rgba(30,64,175,0.12)]"
+                    : "border-white/65 bg-sky-50/32"
+                }`}
               >
-                <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(22rem,0.92fr)] lg:gap-10">
-                  <div className="relative flex flex-col lg:pr-8">
-                    <div className="flex items-start gap-4">
-                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/70 text-[13px] font-semibold text-neutral-900 shadow-sm">
-                        {phase.number}
-                      </span>
-                      <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600">
-                          {phase.phase}
-                        </p>
-                        <p className="mt-1 text-[13px] text-neutral-500">{phase.date}</p>
-                      </div>
-                    </div>
-
-                    <h2 className="mt-8 max-w-2xl text-[2rem] font-semibold tracking-[-0.03em] text-neutral-950 sm:text-[2.35rem]">
-                      {phase.title}
-                    </h2>
-                    <p className="mt-5 max-w-2xl text-[15px] leading-8 text-neutral-600">
-                      {phase.summary}
-                    </p>
-
-                    {phase.metrics ? (
-                      <div className="mt-6 grid gap-2 sm:max-w-xl sm:grid-cols-3">
-                        {phase.metrics.map((metric) => (
-                          <div
-                            key={metric.label}
-                            className="rounded-2xl border border-sky-900/8 bg-sky-50/35 p-3 backdrop-blur-2xl"
-                          >
-                            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
-                              {metric.label}
-                            </p>
-                            <p className="mt-1 text-[13px] font-semibold text-neutral-950">
-                              {metric.value}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    <div className="mt-8 hidden overflow-hidden lg:block lg:h-[220px]">
-                      <StageArtwork stageId={phase.id} />
-                    </div>
-                  </div>
-
-                  <div className="lg:border-l lg:border-neutral-950/8 lg:pl-8">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-neutral-600">
-                      What this stage unlocked
-                    </p>
-
-                    <div className="mt-6 space-y-4">
-                      {detailItems.map((item) => (
-                        <div
-                          key={`${phase.id}-${item.eyebrow}-${item.title}`}
-                          className={`glass-lift relative flex gap-4 rounded-[22px] border px-5 py-5 backdrop-blur-2xl ${
-                            isHighlighted(item.tags, highlightedTags)
-                              ? "border-sky-900/18 bg-sky-50/78 shadow-[0_16px_50px_rgba(30,64,175,0.12)]"
-                              : "border-white/65 bg-sky-50/32"
-                          }`}
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-900/8 bg-sky-50/35 text-sky-700">
+                  <StageDetailIcon icon={item.icon} />
+                </div>
+                <div className="min-w-0 pr-2">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-500">
+                    {item.eyebrow}
+                  </p>
+                  <h3 className="mt-2 text-[17px] font-semibold tracking-[-0.01em] text-neutral-950">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-[14px] leading-7 text-neutral-600">
+                    {item.text}
+                  </p>
+                  {item.tech ? (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {item.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded-full border border-sky-900/8 bg-white/55 px-2.5 py-1 text-[11px] text-neutral-600"
                         >
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-900/8 bg-sky-50/35 text-sky-700">
-                            <StageDetailIcon icon={item.icon} />
-                          </div>
-                          <div className="min-w-0 pr-2">
-                            <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-500">
-                              {item.eyebrow}
-                            </p>
-                            <h3 className="mt-2 text-[17px] font-semibold tracking-[-0.01em] text-neutral-950">
-                              {item.title}
-                            </h3>
-                            <p className="mt-2 text-[14px] leading-7 text-neutral-600">
-                              {item.text}
-                            </p>
-                            {item.tech ? (
-                              <div className="mt-4 flex flex-wrap gap-2">
-                                {item.tech.map((tech) => (
-                                  <span
-                                    key={tech}
-                                    className="rounded-full border border-sky-900/8 bg-white/55 px-2.5 py-1 text-[11px] text-neutral-600"
-                                  >
-                                    {tech}
-                                  </span>
-                                ))}
-                              </div>
-                            ) : null}
-                          </div>
-                        </div>
+                          {tech}
+                        </span>
                       ))}
                     </div>
-                  </div>
+                  ) : null}
                 </div>
-              </article>
-            );
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function buildStageDetailItems(phase: (typeof phases)[number]): StageDetailItem[] {
+  if (phase.id === "foundation-structured") {
+    return foundationInsights.map((insight) => ({
+      eyebrow: "Unlocks",
+      title: insight.title,
+      text: insight.text,
+      tags: insight.tags,
+      icon: insight.icon,
+    }));
+  }
+
+  if (phase.id === "systems") {
+    return [
+      {
+        eyebrow: "Unlocks",
+        title: "Automation",
+        text: "Designed a Python tool for QR code invitation generation, reducing manual work by 15 hours per week.",
+        tags: ["skills", "impact", "stack"],
+        icon: "automation",
+      },
+      {
+        eyebrow: "Unlocks",
+        title: "Telehealth impact",
         text: "Managed 200+ telehealth devices across 15 countries, helping doctors reach remote and underserved regions.",
         tags: ["experience", "impact", "values"],
         icon: "telehealth",
@@ -1511,8 +1513,8 @@ function StageArtwork({ stageId }: { stageId: string }) {
         src="/Art/Telluride.png"
         alt=""
         width={720}
-        height={2}
-        className="block h-full w-auto max-w-none opacity-30"
+        height={420}
+        className="h-[180px] w-full max-w-2xl object-contain opacity-30"
         aria-hidden
       />
     );
@@ -1524,8 +1526,8 @@ function StageArtwork({ stageId }: { stageId: string }) {
         src="/Art/Boston.png"
         alt=""
         width={720}
-        height={280}
-        className="h-auto w-full max-w-2xl object-contain opacity-30"
+        height={220}
+        className="h-[180px] w-full max-w-2xl object-contain opacity-30"
         aria-hidden
       />
     );
