@@ -417,7 +417,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#f3f7fb] text-neutral-950">
+    <main className="relative min-h-screen bg-[#f3f7fb] text-neutral-950">
       <LayeredBackground
         activeInspection={activeInspection}
         backgroundShapePngs={backgroundShapePngs}
@@ -771,7 +771,7 @@ function PhaseSection({
       id={phase.id}
       className="glass-clear relative grid min-h-[34vh] gap-5 rounded-[32px] p-5 lg:min-h-[42vh] lg:grid-cols-[17rem_1fr] lg:p-7"
     >
-      <div className="lg:sticky lg:top-8 lg:self-start">
+      <div className="lg:self-start">
         <div className="flex items-center gap-4">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sky-900/10 bg-sky-50/65 text-[12px] font-semibold text-neutral-900 shadow-sm">
             {phase.number}
