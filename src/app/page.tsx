@@ -504,24 +504,26 @@ export default function Home() {
       />
 
       <div className="page-zoom relative z-10 mx-auto w-full max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
-        <header className="glass-opaque flex items-center justify-between gap-4 rounded-[28px] px-4 py-3 text-[13px] text-neutral-600 sm:rounded-full">
-          <a href="#top" className="font-medium text-neutral-950">
-            Eliecer Camejo
-          </a>
-          <nav className="hidden items-center gap-5 md:flex">
-            <a className="hover:text-neutral-950" href="#work">
-              Work
+      <div className="sticky top-4 z-50">
+          <header className="glass-opaque flex items-center justify-between gap-4 rounded-[28px] px-4 py-3 text-[13px] text-neutral-600 shadow-sm sm:rounded-full">
+            <a href="#top" className="font-medium text-neutral-950">
+              Eliecer Camejo
             </a>
-            <a className="hover:text-neutral-950" href="#journey">
-              Journey
-            </a>
-            <a className="hover:text-neutral-950" href="#top">
-              Top
-            </a>
-          </nav>
-        </header>
-        <div className="mt-2 flex justify-end pr-2">
-          <UptimeBadge minutes={uptimeMinutes} />
+            <nav className="hidden items-center gap-5 md:flex">
+              <a className="hover:text-neutral-950" href="#work">
+                Work
+              </a>
+              <a className="hover:text-neutral-950" href="#journey">
+                Journey
+              </a>
+              <a className="hover:text-neutral-950" href="#top">
+                Top
+              </a>
+            </nav>
+          </header>
+          <div className="mt-2 flex justify-end pr-2">
+            <UptimeBadge minutes={uptimeMinutes} />
+          </div>
         </div>
 
         <section
