@@ -259,35 +259,35 @@ const phases: {
     ],
   },
   {
-    id: "foundation-structured",
-    number: "02",
-    date: "Aug 2020 - Mar 2021",
-    phase: "Foundation",
-    title: "IT consulting as a systems foundation",
-    summary:
-      "Years of IT support and network installation experience paved the way for my IT consulting role at Telluride Bytes. This role taught me the importance of carefully listening to clients and solving challenges holistically, beyond just software or hardware. It also shaped a client-first approach to my work, built on patience, trust, and clear communication. I learned to go the extra mile, build strong relationships, and become someone clients could rely on.",
-    unlocked: [
-      {
-        label: "Workflow thinking",
-        text: "Assisted businesses with IT solutions that optimized workflows, reduced costs, and improved compatibility.",
-        tags: ["experience", "impact", "connector"],
-      },
-      {
-        label: "Lifecycle ownership",
-        text: "Coordinated hardware upgrades, decommissioning, and strategic repurposing.",
-        tags: ["skills", "persistence"],
-      },
-    ],
-    cards: [
-      {
-        type: "Experience",
-        title: "Telluride Bytes",
-        text: "Information Technology Consultant supporting businesses through modernization and practical technical planning.",
-        tags: ["experience", "summary", "journey"],
-      },
-    ],
-  },
-  {
+  //   id: "foundation-structured",
+  //   number: "02",
+  //   date: "Aug 2020 - Mar 2021",
+  //   phase: "Foundation",
+  //   title: "IT consulting as a systems foundation",
+  //   summary:
+  //     "Years of IT support and network installation experience paved the way for my IT consulting role at Telluride Bytes. This role taught me the importance of carefully listening to clients and solving challenges holistically, beyond just software or hardware. It also shaped a client-first approach to my work, built on patience, trust, and clear communication. I learned to go the extra mile, build strong relationships, and become someone clients could rely on.",
+  //   unlocked: [
+  //     {
+  //       label: "Workflow thinking",
+  //       text: "Assisted businesses with IT solutions that optimized workflows, reduced costs, and improved compatibility.",
+  //       tags: ["experience", "impact", "connector"],
+  //     },
+  //     {
+  //       label: "Lifecycle ownership",
+  //       text: "Coordinated hardware upgrades, decommissioning, and strategic repurposing.",
+  //       tags: ["skills", "persistence"],
+  //     },
+  //   ],
+  //   cards: [
+  //     {
+  //       type: "Experience",
+  //       title: "Telluride Bytes",
+  //       text: "Information Technology Consultant supporting businesses through modernization and practical technical planning.",
+  //       tags: ["experience", "summary", "journey"],
+  //     },
+  //   ],
+  // },
+  // {
     id: "systems",
     number: "03",
     date: "Jun 2021 - Mar 2023",
