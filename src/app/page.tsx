@@ -289,7 +289,7 @@ const phases: {
   // },
   // {
     id: "systems",
-    number: "03",
+    number: "02",
     date: "Jun 2021 - Mar 2023",
     phase: "Systems",
     title: "Healthcare technology at human scale",
@@ -319,7 +319,7 @@ const phases: {
   },
   {
     id: "engineering",
-    number: "04",
+    number: "03",
     date: "2023 - May 2027",
     phase: "Computer Science Bachelors",
     title: "Scaling impact through computer science",
@@ -392,7 +392,7 @@ const phases: {
   },
   {
     id: "next",
-    number: "05",
+    number: "04",
     date: "Next chapter",
     phase: "Professional Path",
     title: "Growth, balance, and useful impact",
@@ -1513,7 +1513,7 @@ function StageArtwork({ stageId }: { stageId: string }) {
         src="/Art/Telluride.png"
         alt=""
         width={720}
-        height={420}
+        height={220}
         className="h-[180px] w-full max-w-2xl object-contain opacity-30"
         aria-hidden
       />
@@ -1527,7 +1527,7 @@ function StageArtwork({ stageId }: { stageId: string }) {
         alt=""
         width={720}
         height={220}
-        className="h-[180px] w-full max-w-2xl object-contain opacity-30"
+        className="h-[180px] w-full max-w-2xl  object-contain opacity-30"
         aria-hidden
       />
     );
