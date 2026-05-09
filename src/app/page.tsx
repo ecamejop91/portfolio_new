@@ -54,6 +54,13 @@ type SummaryItem =
       children: string[];
     };
 
+type SnapshotProject = {
+  label: string;
+  text: string;
+  cta: string;
+  href: string;
+};
+
 const foundationInsights: {
   title: string;
   text: string;
@@ -455,12 +462,18 @@ const overviewCards = [
   ["Core stack", "Python, SQL, Google Cloud, Docker, Linux"],
 ];
 
-const snapshotProjects = [
+const snapshotProjects: SnapshotProject[] = [
   {
     label: "Featured Work",
     text: "Sona AI interview platform",
     cta: "View project ->",
     href: "/projects/sona",
+  },
+  {
+    label: "Infrastructure",
+    text: "Self-Hosted Linux Automation Stack",
+    cta: "View project ->",
+    href: "/projects/linux-automation-stack",
   },
   {
     label: "Current Build",
@@ -469,6 +482,99 @@ const snapshotProjects = [
     href: "/projects/document-search",
   },
 ];
+
+function useProjectCardDrift(projects: SnapshotProject[]) {
+  const [styles, setStyles] = useState<CSSProperties[]>(
+    () =>
+      projects.map(() => ({
+        transform: "translate3d(0px, 0px, 0px)",
+      })),
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    if (mediaQuery.matches) {
+      setStyles(
+        projects.map(() => ({
+          transform: "translate3d(0px, 0px, 0px)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 14px 38px rgba(30, 64, 175, 0.06)",
+        })),
+      );
+      return;
+    }
+
+    const maxX = 3.25;
+    const maxY = 2.6;
+    const baseShadow = 0.06;
+    const shadowSpread = 0.035;
+    const particles = projects.map((_, index) => ({
+      x: 0,
+      y: 0,
+      offsetX: index === 0 ? -1.6 : index === 1 ? 1.2 : -0.8,
+      offsetY: index === 0 ? -0.8 : index === 1 ? 0.9 : 1.4,
+      phaseX: index * 1.9 + 0.7,
+      phaseY: index * 1.4 + 1.2,
+      speedX: 0.000481 + index * 0.0000455,
+      speedY: 0.000377 + index * 0.000039,
+      ampX: 2.73 + (index % 2) * 0.585,
+      ampY: 1.885 + index * 0.3575,
+    }));
+
+    let frameId = 0;
+    const startedAt = performance.now();
+
+    const step = (timestamp: number) => {
+      const elapsed = timestamp - startedAt;
+
+      for (const particle of particles) {
+        particle.x =
+          particle.offsetX +
+          Math.sin(elapsed * particle.speedX + particle.phaseX) * particle.ampX +
+          Math.cos(elapsed * particle.speedY * 0.72 + particle.phaseY) * 0.8;
+        particle.y =
+          particle.offsetY +
+          Math.sin(elapsed * particle.speedY + particle.phaseY) * particle.ampY +
+          Math.cos(elapsed * particle.speedX * 0.64 + particle.phaseX) * 0.6;
+      }
+
+      for (let index = 0; index < particles.length; index += 1) {
+        particles[index].x = Math.max(-maxX, Math.min(maxX, particles[index].x));
+        particles[index].y = Math.max(-maxY, Math.min(maxY, particles[index].y));
+      }
+
+      setStyles(
+        particles.map((particle) => {
+          const lift = Math.max(0, -particle.y);
+          const shadowOpacity = Math.min(0.12, baseShadow + lift * shadowSpread);
+          const shadowBlur = 38 + lift * 8;
+          const shadowY = 14 + lift * 3;
+
+          return {
+            transform: `translate3d(${particle.x.toFixed(2)}px, ${particle.y.toFixed(2)}px, 0)`,
+            boxShadow: `inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 ${shadowY.toFixed(2)}px ${shadowBlur.toFixed(2)}px rgba(30, 64, 175, ${shadowOpacity.toFixed(3)})`,
+            willChange: "transform, box-shadow",
+          };
+        }),
+      );
+
+      frameId = window.requestAnimationFrame(step);
+    };
+
+    frameId = window.requestAnimationFrame(step);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [projects]);
+
+  return styles;
+}
 
 const graphNodes: { key: SystemNode; label: string; tags: HighlightTag[] }[] = [
   { key: "persistence", label: "Persistence", tags: ["persistence", "journey"] },
@@ -489,6 +595,7 @@ export default function Home() {
   const [activeNode, setActiveNode] = useState<SystemNode | null>(null);
   const [backgroundShapePngs, setBackgroundShapePngs] = useState<string[]>([]);
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
+  const projectCardStyles = useProjectCardDrift(snapshotProjects);
   const highlightedTags = activeInspection
     ? inspectionHighlights[activeInspection]
     : activeNode
@@ -665,11 +772,12 @@ export default function Home() {
                   )}
                 </div>
               ))}
-              {snapshotProjects.map((project) => (
+              {snapshotProjects.map((project, index) => (
                 <Link
                   key={project.label}
                   href={project.href}
-                  className="block rounded-[22px] border border-sky-900/12 bg-sky-50/28 p-3 backdrop-blur-2xl transition hover:border-sky-900/20 hover:bg-sky-50/45"
+                  style={projectCardStyles[index]}
+                  className="block rounded-[22px] border border-sky-900/12 bg-sky-50/28 p-3 backdrop-blur-2xl transition-colors duration-300 hover:border-sky-900/20 hover:bg-sky-50/45"
                 >
                   <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
                     {project.label}
