@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { ProjectDetail } from "@/lib/project-details";
+import { AmbientBackground } from "@/components/ambient-background";
 import { ProjectImageGallery } from "@/components/project-image-gallery";
 
 const sectionOrder = [
@@ -21,7 +22,8 @@ const sectionOrder = [
 export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,#020617_0%,#020617_38%,#020b16_100%)] text-white">
-      <div className="mx-auto max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
+      <AmbientBackground />
+      <div className="relative z-10 mx-auto max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
         <div className="sticky top-4 z-30 mb-6 flex justify-start">
           <Link
             href="/projects"

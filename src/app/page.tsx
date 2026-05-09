@@ -680,7 +680,7 @@ export default function Home() {
         >
           <div className="mt-[100px] max-w-4xl">
             <p className="mb-5 text-[11px] font-medium uppercase tracking-[0.24em] text-neutral-500">
-              Portfolio as a system map
+              WHO I AM, WHAT I DO
             </p>
 <h1 className="max-w-4xl text-3xl font-semibold leading-[1.05] tracking-[-0.03em] text-neutral-950 sm:text-4xl lg:text-5xl">
   Working on systems that improve people’s lives.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { AmbientBackground } from "@/components/ambient-background";
 import { projectDetails } from "@/lib/project-details";
 
 export const metadata: Metadata = {
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
 export default function ProjectsIndexPage() {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_25%),linear-gradient(180deg,#020617_0%,#020617_34%,#020b16_100%)] text-white">
-      <div className="mx-auto max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
+      <AmbientBackground variant="project-index" />
+      <div className="relative z-10 mx-auto max-w-7xl px-5 py-6 sm:px-8 lg:px-10">
         <div className="sticky top-4 z-30 mb-6 flex justify-start">
           <Link
             href="/#work"
