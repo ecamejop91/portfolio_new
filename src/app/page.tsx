@@ -2,6 +2,9 @@
 
 import { type CSSProperties, useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
+import { projectDetails } from "@/lib/project-details";
 
 type InspectionKey = "recruiter" | "professional" | "technical" | "personal" | "timeline";
 type HighlightTag =
@@ -122,7 +125,7 @@ const inspections: Record<
 > = {
   recruiter: {
     eyebrow: "Recruiter Scan",
-    title: "Experience Snapshot",
+    title: "Experience Overview",
     command: "",
     summary: [
       "Computer Science student at Tennessee State University",
@@ -141,14 +144,15 @@ const inspections: Record<
     sections: [
       {
         label: "Snapshot",
-        text: "A non-traditional computer science student with internship and project experience across big tech, healthcare, finance, and IT consulting. Comfortable working in corporate environments, cross-functional teams, and systems where reliability and communication matter.",
+        text: "A non-traditional computer science student with internship and project experience. Comfortable working in corporate environments, cross-functional teams, and systems where reliability and communication matter.",
       },
       {
         label: "Impact",
         text: [
+          "Developing AI interview platform venture",
           "Built Kafka pipeline for 12M patient records/day",
           "Built cloud ML deployment pipeline",
-          "Migrated Fitbit backend service",
+          "Migrated Fitbit backend service at Google",
           "Automated 15 hrs/week of manual work",
           "Managed 200+ Telehealth devices",
         ],
@@ -452,8 +456,18 @@ const overviewCards = [
 ];
 
 const snapshotProjects = [
-  ["Featured Work", "Sona AI interview platform", "View project ->"],
-  ["Current Build", "Local semantic document search", "View project ->"],
+  {
+    label: "Featured Work",
+    text: "Sona AI interview platform",
+    cta: "View project ->",
+    href: "/projects/sona",
+  },
+  {
+    label: "Current Build",
+    text: "Local document search system",
+    cta: "View project ->",
+    href: "/projects/document-search",
+  },
 ];
 
 const graphNodes: { key: SystemNode; label: string; tags: HighlightTag[] }[] = [
@@ -651,21 +665,22 @@ export default function Home() {
                   )}
                 </div>
               ))}
-              {snapshotProjects.map(([label, text, cta]) => (
-                <div
-                  key={label}
-                  className="rounded-[22px] border border-sky-900/12 bg-sky-50/28 p-3 backdrop-blur-2xl"
+              {snapshotProjects.map((project) => (
+                <Link
+                  key={project.label}
+                  href={project.href}
+                  className="block rounded-[22px] border border-sky-900/12 bg-sky-50/28 p-3 backdrop-blur-2xl transition hover:border-sky-900/20 hover:bg-sky-50/45"
                 >
                   <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
-                    {label}
+                    {project.label}
                   </span>
                   <span className="mt-1 block text-[13px] leading-5 text-neutral-900">
-                    {text}
+                    {project.text}
                   </span>
                   <span className="mt-2 inline-flex text-[11px] font-medium text-sky-700">
-                    {cta}
+                    {project.cta}
                   </span>
-                </div>
+                </Link>
               ))}
             </div>
           </aside>
@@ -721,6 +736,66 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="scroll-mt-20 py-12 md:py-16">
+          <div className="mb-8">
+            <SectionIntro
+              eyebrow="Project Pages"
+              title="Dedicated technical case studies"
+              text="Open a full project page for architecture, screenshots, tools, impact, and implementation details."
+            />
+          </div>
+          <div className="grid gap-5 lg:grid-cols-2">
+            {projectDetails.map((project) => (
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                className="glass-clear glass-lift rounded-[28px] border border-white/65 p-5 text-left"
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                  {project.type}
+                </p>
+                <h2 className="mt-3 text-[1.5rem] font-semibold tracking-[-0.03em] text-neutral-950">
+                  {project.title}
+                </h2>
+                <p className="mt-3 text-[14px] leading-7 text-neutral-600">
+                  {project.subtitle}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.tags.slice(0, 6).map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-sky-900/8 bg-white/55 px-2.5 py-1 text-[11px] text-neutral-600"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-sky-900/8 bg-sky-50/35 p-3">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                      Role
+                    </p>
+                    <p className="mt-1 text-[13px] leading-6 text-neutral-900">
+                      {project.role}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-sky-900/8 bg-sky-50/35 p-3">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                      Status
+                    </p>
+                    <p className="mt-1 text-[13px] leading-6 text-neutral-900">
+                      {project.status}
+                    </p>
+                  </div>
+                </div>
+                <span className="mt-5 inline-flex text-[13px] font-medium text-sky-700">
+                  {"Open project page ->"}
+                </span>
+              </Link>
+            ))}
           </div>
         </section>
       </div>
@@ -1801,11 +1876,16 @@ function InspectionPanel({
                 ) : (
                   <li key={item.text}>
                     {item.text}
-                    <ul className="mt-2 list-disc pl-6 text-[18px] leading-8 text-neutral-700">
+                    <div className="mt-3 flex flex-wrap gap-2 text-[15px] leading-6 text-neutral-700">
                       {item.children.map((child) => (
-                        <li key={child}>{child}</li>
+                        <span
+                          key={child}
+                          className="rounded-full border border-sky-900/10 bg-white/65 px-3 py-1 font-medium text-neutral-700"
+                        >
+                          {child}
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                   </li>
                 ),
               )}
