@@ -116,7 +116,7 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
 
         <div className="mt-10 space-y-8">
           <SectionCard id="overview" title="Overview">
-            <ParagraphList items={project.overview} />
+            <ParagraphList items={project.sections.overview} />
           </SectionCard>
 
           <SectionCard id="impact" title="Quick Impact">
@@ -129,10 +129,10 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
 
           <div className="grid gap-8 lg:grid-cols-2">
             <SectionCard id="problem" title="Problem">
-              <ParagraphList items={project.problem} />
+              <ParagraphList items={project.sections.problem} />
             </SectionCard>
             <SectionCard id="solution" title="Solution">
-              <ParagraphList items={project.solution} />
+              <ParagraphList items={project.sections.solution} />
             </SectionCard>
           </div>
 
@@ -180,19 +180,19 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
 
           <div className="grid gap-8 lg:grid-cols-2">
             <SectionCard id="whatIDid" title="What I Did">
-              <BulletList items={project.whatIDid} />
+              <BulletList items={project.sections.whatIDid} />
             </SectionCard>
             <SectionCard id="challenges" title="Challenges">
-              <BulletList items={project.challenges} />
+              <BulletList items={project.sections.challenges} />
             </SectionCard>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-2">
             <SectionCard id="results" title="Results">
-              <BulletList items={project.results} />
+              <BulletList items={project.sections.results} />
             </SectionCard>
             <SectionCard id="lessons" title="Lessons Learned">
-              <ParagraphList items={project.lessons} />
+              <ParagraphList items={project.sections.lessons} />
             </SectionCard>
           </div>
 

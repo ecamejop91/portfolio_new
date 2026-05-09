@@ -37,15 +37,17 @@ export type ProjectDetail = {
   accent: string;
   tags: string[];
   impact: string[];
-  overview: string[];
-  problem: string[];
-  solution: string[];
+  sections: {
+    overview: string[];
+    problem: string[];
+    solution: string[];
+    whatIDid: string[];
+    challenges: string[];
+    results: string[];
+    lessons: string[];
+  };
   architecture: { label: string; detail: string }[];
   tools: ProjectToolGroup[];
-  whatIDid: string[];
-  challenges: string[];
-  results: string[];
-  lessons: string[];
   gallery: ProjectGalleryItem[];
   links: ProjectLinkSet;
 };
@@ -83,19 +85,43 @@ export const projectDetails: ProjectDetail[] = [
       "Delivered competition-ready prototype",
       "Won 1st place at BofA Code-A-Thon",
     ],
-    overview: [
-      "Sona is an AI-powered interview practice platform built to help students simulate interview environments and receive personalized feedback.",
-      "The platform was created during a Bank of America Code-A-Thon and won 1st place among 12 teams.",
-      "The project focused on product flow, AI-assisted feedback, resume and job-description inputs, and a realistic interview preparation experience.",
-    ],
-    problem: [
-      "Students often struggle to practice interviews in realistic conditions before applying to internships or full-time roles.",
-      "Generic practice questions are not enough because students need feedback connected to their resume, target role, and performance.",
-    ],
-    solution: [
-      "We built an AI-powered interview practice platform where users can provide career context, complete a simulated interview, and receive feedback.",
-      "The system was designed to help students prepare for interviews with a more personalized and interactive experience.",
-    ],
+    sections: {
+      overview: [
+        "Sona is an AI-powered interview practice platform built to help students simulate interview environments and receive personalized feedback.",
+        "The platform was created during a Bank of America Code-A-Thon and won 1st place among 12 teams.",
+        "The project focused on product flow, AI-assisted feedback, resume and job-description inputs, and a realistic interview preparation experience.",
+      ],
+      problem: [
+        "Students often struggle to practice interviews in realistic conditions before applying to internships or full-time roles.",
+        "Generic practice questions are not enough because students need feedback connected to their resume, target role, and performance.",
+      ],
+      solution: [
+        "We built an AI-powered interview practice platform where users can provide career context, complete a simulated interview, and receive feedback.",
+        "The system was designed to help students prepare for interviews with a more personalized and interactive experience.",
+      ],
+      whatIDid: [
+        "Helped design and build the core product flow.",
+        "Worked on the interview preparation experience.",
+        "Integrated resume and job-description context into the workflow.",
+        "Contributed to system design and demo delivery.",
+        "Helped prepare a competition-ready prototype.",
+      ],
+      challenges: [
+        "Designing a realistic interview flow under time pressure.",
+        "Making the experience useful for students quickly.",
+        "Balancing AI features with a simple user interface.",
+        "Preparing a working prototype for competition judging.",
+      ],
+      results: [
+        "Delivered a working AI interview practice prototype.",
+        "Won 1st place at a national Bank of America Code-A-Thon.",
+        "Created a product concept with potential for student career preparation.",
+        "Practiced building under time constraints with a team.",
+      ],
+      lessons: [
+        "This project taught me how important product clarity is when building under time pressure. A technically interesting system still needs a clear user flow, a strong problem statement, and a demo that communicates value quickly.",
+      ],
+    },
     architecture: [
       { label: "User", detail: "Student enters role goals, resume context, and interview preferences." },
       { label: "Next.js App", detail: "Handles the product flow, UI states, and interview session experience." },
@@ -111,29 +137,6 @@ export const projectDetails: ProjectDetail[] = [
         items: ["AI services", "Resume processing", "Job-description analysis", "Feedback generation"],
       },
       { label: "Database / Auth", items: ["Firebase Auth", "Firestore", "Firebase Storage"] },
-    ],
-    whatIDid: [
-      "Helped design and build the core product flow.",
-      "Worked on the interview preparation experience.",
-      "Integrated resume and job-description context into the workflow.",
-      "Contributed to system design and demo delivery.",
-      "Helped prepare a competition-ready prototype.",
-    ],
-    challenges: [
-      "Designing a realistic interview flow under time pressure.",
-      "Making the experience useful for students quickly.",
-      "Balancing AI features with a simple user interface.",
-      "Preparing a working prototype for competition judging.",
-    ],
-    results: [
-      "Delivered a working AI interview practice prototype.",
-      "Won 1st place at a national Bank of America Code-A-Thon.",
-      "Created a product concept with potential for student career preparation.",
-      "Practiced building under time constraints with a team.",
-    ],
-    lessons: [
-      "This project reinforced how important product clarity is when building under time pressure.",
-      "A technically interesting system still needs a clear user flow, a strong problem statement, and a demo that communicates value quickly.",
     ],
     gallery: [
       {
@@ -209,19 +212,49 @@ export const projectDetails: ProjectDetail[] = [
       "Integrated Plex, Sonarr, Radarr, and qBittorrent",
       "Troubleshot container, DNS, and service issues",
     ],
-    overview: [
-      "I built and manage a self-hosted Linux automation environment on a private Ubuntu server.",
-      "The system runs multiple Dockerized services and custom scripts that automate media workflows, storage organization, scheduled jobs, and service monitoring.",
-      "This project focuses on deployment, systems integration, Linux administration, and automation rather than building the underlying third-party applications from scratch.",
-    ],
-    problem: [
-      "I wanted to learn how real services are deployed, connected, monitored, and maintained outside of classroom assignments.",
-      "I also wanted to reduce repetitive file management tasks and create a reliable private server environment that I could customize with scripts and Linux automation.",
-    ],
-    solution: [
-      "I deployed a Docker-based service stack on Ubuntu and connected media services, storage folders, automation scripts, scheduled jobs, and monitoring checks into one managed environment.",
-      "I customized the setup with Bash scripts, cron jobs, Docker networking, and persistent volumes to automate repetitive workflows.",
-    ],
+    sections: {
+      overview: [
+        "I built and manage a self-hosted Linux automation environment on a private Ubuntu server.",
+        "The system runs multiple Dockerized services and custom scripts that automate media workflows, storage organization, scheduled jobs, and service monitoring.",
+        "This project focuses on deployment, systems integration, Linux administration, and automation rather than building the underlying third-party applications from scratch.",
+      ],
+      problem: [
+        "I wanted to learn how real services are deployed, connected, monitored, and maintained outside of classroom assignments.",
+        "I also wanted to reduce repetitive file management tasks and create a reliable private server environment that I could customize with scripts and Linux automation.",
+      ],
+      solution: [
+        "I deployed a Docker-based service stack on Ubuntu and connected media services, storage folders, automation scripts, scheduled jobs, and monitoring checks into one managed environment.",
+        "I customized the setup with Bash scripts, cron jobs, Docker networking, and persistent volumes to automate repetitive workflows.",
+      ],
+      whatIDid: [
+        "Deployed and configured Dockerized services.",
+        "Connected services through Docker networking.",
+        "Configured persistent storage volumes.",
+        "Managed Linux permissions and mounted directories.",
+        "Created Bash scripts for workflow automation.",
+        "Scheduled recurring jobs with cron.",
+        "Monitored logs and resolved service failures.",
+        "Tuned the setup around my own workflow needs.",
+      ],
+      challenges: [
+        "Handling container networking between services.",
+        "Managing Linux file permissions across mounted volumes.",
+        "Debugging storage paths inside and outside containers.",
+        "Automating workflows around filenames and completed downloads.",
+        "Keeping services reliable after restarts.",
+        "Reading logs to diagnose failures.",
+      ],
+      results: [
+        "Created a working private server environment.",
+        "Reduced repetitive file-management tasks.",
+        "Built reusable Linux automation patterns.",
+        "Improved hands-on understanding of Docker, Linux, networking, and storage.",
+        "Gained practical operational experience maintaining services over time.",
+      ],
+      lessons: [
+        "This project taught me that running software is different from only writing software. Deployment, storage, logs, networking, permissions, and automation all affect whether a system actually works reliably. It helped me think more like an operator and systems engineer.",
+      ],
+    },
     architecture: [
       { label: "User / Browser", detail: "Accesses the stack through the local network or a domain." },
       { label: "Local Network / Domain", detail: "Routes traffic into the private Ubuntu environment." },
@@ -239,36 +272,6 @@ export const projectDetails: ProjectDetail[] = [
         label: "Infrastructure",
         items: ["Networking", "Storage mounts", "Linux permissions", "Service logs"],
       },
-    ],
-    whatIDid: [
-      "Deployed and configured Dockerized services.",
-      "Connected services through Docker networking.",
-      "Configured persistent storage volumes.",
-      "Managed Linux permissions and mounted directories.",
-      "Created Bash scripts for workflow automation.",
-      "Scheduled recurring jobs with cron.",
-      "Monitored logs and resolved service failures.",
-      "Tuned the setup around my own workflow needs.",
-    ],
-    challenges: [
-      "Handling container networking between services.",
-      "Managing Linux file permissions across mounted volumes.",
-      "Debugging storage paths inside and outside containers.",
-      "Automating workflows around filenames and completed downloads.",
-      "Keeping services reliable after restarts.",
-      "Reading logs to diagnose failures.",
-    ],
-    results: [
-      "Created a working private server environment.",
-      "Reduced repetitive file-management tasks.",
-      "Built reusable Linux automation patterns.",
-      "Improved hands-on understanding of Docker, Linux, networking, and storage.",
-      "Gained practical operational experience maintaining services over time.",
-    ],
-    lessons: [
-      "This project taught me that running software is different from only writing software.",
-      "Deployment, storage, logs, networking, permissions, and automation all affect whether a system actually works reliably.",
-      "It helped me think more like an operator and systems engineer.",
     ],
     gallery: [
       {
@@ -342,19 +345,46 @@ export const projectDetails: ProjectDetail[] = [
       "Tracked uptime and container runtime",
       "Estimated hosting savings live",
     ],
-    overview: [
-      "This portfolio is self-hosted from a private Ubuntu server that I manage.",
-      "The site runs as a Dockerized Next.js application, is served through Caddy, and includes health checks, uptime tracking, and estimated hosting savings compared to a similar cloud VPS.",
-      "This project demonstrates deployment, infrastructure, monitoring, and cost-aware engineering.",
-    ],
-    problem: [
-      "Most portfolios are hosted through managed services, which hides the infrastructure behind the site.",
-      "I wanted my portfolio itself to demonstrate deployment ability, Linux server management, containerization, monitoring, and cost-aware engineering.",
-    ],
-    solution: [
-      "I deployed my portfolio as a containerized Next.js application on a private Ubuntu server.",
-      "Caddy handles routing and reverse proxy behavior, Docker isolates the app runtime, and the site includes a health endpoint for monitoring service status.",
-    ],
+    sections: {
+      overview: [
+        "This portfolio is self-hosted from a private Ubuntu server that I manage.",
+        "The site runs as a Dockerized Next.js application, is served through Caddy, and includes health checks, uptime tracking, and estimated hosting savings compared to a similar cloud VPS.",
+        "This project demonstrates deployment, infrastructure, monitoring, and cost-aware engineering.",
+      ],
+      problem: [
+        "Most portfolios are hosted through managed services, which hides the infrastructure behind the site.",
+        "I wanted my portfolio itself to demonstrate deployment ability, Linux server management, containerization, monitoring, and cost-aware engineering.",
+      ],
+      solution: [
+        "I deployed my portfolio as a containerized Next.js application on a private Ubuntu server.",
+        "Caddy handles routing and reverse proxy behavior, Docker isolates the app runtime, and the site includes a health endpoint for monitoring service status.",
+      ],
+      whatIDid: [
+        "Built the portfolio using Next.js and Tailwind.",
+        "Containerized the application with Docker.",
+        "Deployed the app on a private Ubuntu server.",
+        "Configured routing with Caddy.",
+        "Added health checks and uptime/status display.",
+        "Designed a live estimated hosting savings calculation.",
+      ],
+      challenges: [
+        "Avoiding double scrollbars and layout issues.",
+        "Handling Docker deployment and port mapping.",
+        "Routing traffic through Caddy and domain configuration.",
+        "Creating a clean way to show uptime, health, and savings.",
+        "Keeping infrastructure claims accurate and not exaggerated.",
+      ],
+      results: [
+        "Deployed a self-hosted production portfolio.",
+        "Added public health and status monitoring.",
+        "Showcased Docker, Linux, routing, and deployment skills.",
+        "Added estimated hosting savings compared to a cloud VPS.",
+        "Turned the portfolio itself into a technical project.",
+      ],
+      lessons: [
+        "This project taught me how to treat a personal website like a real deployed service. I learned to think about uptime, health checks, routing, containers, monitoring, and cost, not just the visual design of the site.",
+      ],
+    },
     architecture: [
       { label: "Visitor", detail: "Loads the site and navigates through the public portfolio pages." },
       { label: "Domain / Tunnel", detail: "Traffic is routed through domain configuration and a reverse-proxy path." },
@@ -371,32 +401,6 @@ export const projectDetails: ProjectDetail[] = [
         items: ["Health endpoint", "Docker healthcheck", "External uptime checks"],
       },
       { label: "Networking", items: ["Domain routing", "Cloudflare Tunnel", "Reverse proxy"] },
-    ],
-    whatIDid: [
-      "Built the portfolio using Next.js and Tailwind.",
-      "Containerized the application with Docker.",
-      "Deployed the app on a private Ubuntu server.",
-      "Configured routing with Caddy.",
-      "Added health checks and uptime/status display.",
-      "Designed a live estimated hosting savings calculation.",
-    ],
-    challenges: [
-      "Avoiding double scrollbars and layout issues.",
-      "Handling Docker deployment and port mapping.",
-      "Routing traffic through Caddy and domain configuration.",
-      "Creating a clean way to show uptime, health, and savings.",
-      "Keeping infrastructure claims accurate and not exaggerated.",
-    ],
-    results: [
-      "Deployed a self-hosted production portfolio.",
-      "Added public health and status monitoring.",
-      "Showcased Docker, Linux, routing, and deployment skills.",
-      "Added estimated hosting savings compared to a cloud VPS.",
-      "Turned the portfolio itself into a technical project.",
-    ],
-    lessons: [
-      "This project taught me how to treat a personal website like a real deployed service.",
-      "I learned to think about uptime, health checks, routing, containers, monitoring, and cost, not just the visual design of the site.",
     ],
     gallery: [
       {
@@ -470,19 +474,46 @@ export const projectDetails: ProjectDetail[] = [
       "Used vector ranking for search relevance",
       "Prioritized local privacy-focused processing",
     ],
-    overview: [
-      "This project explores local document search across a collection of PDFs using text extraction, tokenization, tagging, and vector-based ranking.",
-      "The goal was to create a private, searchable document system without relying on cloud-hosted AI services.",
-      "The project focused on information retrieval, privacy, and practical search performance.",
-    ],
-    problem: [
-      "Household and business PDFs can become difficult to search when files are scattered across folders.",
-      "I wanted a local system that could extract text, tag documents, and return useful search results while keeping the data private.",
-    ],
-    solution: [
-      "I created a local document-processing workflow that extracts text from PDFs, cleans and tokenizes the content, assigns tags, and ranks documents based on search relevance.",
-      "The project emphasizes privacy, local processing, and practical document retrieval.",
-    ],
+    sections: {
+      overview: [
+        "This project explores local document search across a collection of PDFs using text extraction, tokenization, tagging, and vector-based ranking.",
+        "The goal was to create a private, searchable document system without relying on cloud-hosted AI services.",
+        "The project focused on information retrieval, privacy, and practical search performance.",
+      ],
+      problem: [
+        "Household and business PDFs can become difficult to search when files are scattered across folders.",
+        "I wanted a local system that could extract text, tag documents, and return useful search results while keeping the data private.",
+      ],
+      solution: [
+        "I created a local document-processing workflow that extracts text from PDFs, cleans and tokenizes the content, assigns tags, and ranks documents based on search relevance.",
+        "The project emphasizes privacy, local processing, and practical document retrieval.",
+      ],
+      whatIDid: [
+        "Processed a local collection of PDF documents.",
+        "Extracted and cleaned text from files.",
+        "Designed a tag classification system.",
+        "Implemented search ranking logic.",
+        "Tested results against real document examples.",
+        "Focused on privacy-preserving local processing.",
+      ],
+      challenges: [
+        "Extracting clean text from inconsistent PDFs.",
+        "Reducing noise from document formatting.",
+        "Choosing useful tags.",
+        "Ranking search results accurately.",
+        "Keeping the system local and privacy-friendly.",
+      ],
+      results: [
+        "Built a working local PDF search workflow.",
+        "Processed hundreds of documents.",
+        "Created searchable tags and ranked results.",
+        "Demonstrated practical information retrieval concepts.",
+        "Preserved privacy by keeping processing local.",
+      ],
+      lessons: [
+        "This project taught me how much search quality depends on preprocessing, tokenization, and ranking decisions. It also helped me understand why privacy, speed, and relevance are important tradeoffs in document search systems.",
+      ],
+    },
     architecture: [
       { label: "PDF Folder", detail: "A local document set acts as the private source corpus." },
       { label: "Text Extraction", detail: "PDF contents are parsed into machine-readable text." },
@@ -496,32 +527,6 @@ export const projectDetails: ProjectDetail[] = [
       { label: "Libraries", items: ["PyMuPDF", "Pandas", "Regex"] },
       { label: "Search", items: ["TF-IDF or vector ranking", "Cosine similarity", "Tag classification"] },
       { label: "Environment", items: ["Jupyter Notebook", "Local file system"] },
-    ],
-    whatIDid: [
-      "Processed a local collection of PDF documents.",
-      "Extracted and cleaned text from files.",
-      "Designed a tag classification system.",
-      "Implemented search ranking logic.",
-      "Tested results against real document examples.",
-      "Focused on privacy-preserving local processing.",
-    ],
-    challenges: [
-      "Extracting clean text from inconsistent PDFs.",
-      "Reducing noise from document formatting.",
-      "Choosing useful tags.",
-      "Ranking search results accurately.",
-      "Keeping the system local and privacy-friendly.",
-    ],
-    results: [
-      "Built a working local PDF search workflow.",
-      "Processed hundreds of documents.",
-      "Created searchable tags and ranked results.",
-      "Demonstrated practical information retrieval concepts.",
-      "Preserved privacy by keeping processing local.",
-    ],
-    lessons: [
-      "This project taught me how much search quality depends on preprocessing, tokenization, and ranking decisions.",
-      "It also helped me understand why privacy, speed, and relevance are important tradeoffs in document search systems.",
     ],
     gallery: [
       {
