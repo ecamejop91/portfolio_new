@@ -1,0 +1,12 @@
+{
+  "savings": {
+    "trackedStartedAt": "2026-05-09T01:00:22.119Z",
+    "lastCalculatedAt": null,
+    "estimatedSavings": null
+  },
+  "health": {
+    "checks": [
+      "2026-05-09T01:00:22.119Z"
+    ]
+  }
+}

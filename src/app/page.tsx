@@ -38,6 +38,19 @@ type FloatingShapeState = {
   src: string;
 };
 
+const GRADUATION_TARGET_MS = new Date("2027-05-20T00:00:00-05:00").getTime();
+
+function calculateDaysRemaining(nowMs = Date.now()) {
+  return Math.max(0, Math.ceil((GRADUATION_TARGET_MS - nowMs) / 86_400_000));
+}
+
+type SummaryItem =
+  | string
+  | {
+      text: string;
+      children: string[];
+    };
+
 const foundationInsights: {
   title: string;
   text: string;
@@ -103,16 +116,28 @@ const inspections: Record<
     eyebrow: string;
     title: string;
     command: string;
-    summary: string;
-    sections: { label: string; text: string }[];
+    summary: string | SummaryItem[];
+    sections: { label: string; text: string | string[] }[];
   }
 > = {
   recruiter: {
     eyebrow: "Recruiter Scan",
-    title: "Candidate snapshot",
-    command: "scan /resume /impact /fit",
-    summary:
-      "Computer Science student at Tennessee State University, GPA 3.9. Expected graduation: May 2027. Experience across HCA Healthcare, Google STEP, Boston Scientific, and IT consulting.",
+    title: "Experience Snapshot",
+    command: "",
+    summary: [
+      "Computer Science student at Tennessee State University",
+      "GPA 3.9",
+      "Expected graduation: May 2027",
+      {
+        text: "Experience across Technology, Healthcare and Finance Industries:",
+        children: [
+          "Boston Scientific",
+          "Google",
+          "HCA Healthcare",
+          "Bank of America",
+        ],
+      },
+    ],
     sections: [
       {
         label: "Snapshot",
@@ -120,7 +145,13 @@ const inspections: Record<
       },
       {
         label: "Impact",
-        text: "Built patient-data Machine Learning infrastructure at HCA, supported Fitbit service operations at Google, and contributed to telehealth systems across 15 countries.",
+        text: [
+          "Built Kafka pipeline for 12M patient records/day",
+          "Built cloud ML deployment pipeline",
+          "Migrated Fitbit backend service",
+          "Automated 15 hrs/week of manual work",
+          "Managed 200+ Telehealth devices",
+        ],
       },
       {
         label: "Strengths",
@@ -442,25 +473,13 @@ const graphNodes: { key: SystemNode; label: string; tags: HighlightTag[] }[] = [
 export default function Home() {
   const [activeInspection, setActiveInspection] = useState<InspectionKey | null>(null);
   const [activeNode, setActiveNode] = useState<SystemNode | null>(null);
-  const [uptimeMinutes, setUptimeMinutes] = useState(0);
   const [backgroundShapePngs, setBackgroundShapePngs] = useState<string[]>([]);
+  const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const highlightedTags = activeInspection
     ? inspectionHighlights[activeInspection]
     : activeNode
       ? graphNodes.find((node) => node.key === activeNode)?.tags ?? []
       : [];
-
-  useEffect(() => {
-    const startedAt = Date.now();
-    const updateUptime = () => {
-      setUptimeMinutes(Math.floor((Date.now() - startedAt) / 60000));
-    };
-
-    updateUptime();
-    const interval = window.setInterval(updateUptime, 30000);
-
-    return () => window.clearInterval(interval);
-  }, []);
 
   const scrollToId = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -496,6 +515,16 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    setDaysRemaining(calculateDaysRemaining());
+
+    const interval = window.setInterval(() => {
+      setDaysRemaining(calculateDaysRemaining());
+    }, 60 * 60 * 1000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
   return (
     <main className="relative min-h-screen bg-[#f3f7fb] text-neutral-950">
       <LayeredBackground
@@ -520,8 +549,8 @@ export default function Home() {
             </a>
           </nav>
         </header>
-        <div className="mt-2 flex justify-end pr-2">
-          <UptimeBadge minutes={uptimeMinutes} />
+        <div className="mt-3 flex justify-end">
+          <PortfolioStatusCard />
         </div>
 
         <section
@@ -589,12 +618,37 @@ export default function Home() {
                   key={label}
                   className={snapshotCardState(["summary", "skills"], highlightedTags)}
                 >
-                  <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
-                    {label}
-                  </span>
-                  <span className="mt-1 block text-[13px] leading-5 text-neutral-950">
-                    {value}
-                  </span>
+                  {label === "Graduation" ? (
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                          {label}
+                        </span>
+                        <span className="mt-1 block text-[13px] leading-5 text-neutral-950">
+                          {value}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                          Countdown
+                        </span>
+                        <span className="mt-1 block text-[13px] leading-5 text-neutral-950">
+                          {daysRemaining === null
+                            ? "Loading..."
+                            : `Graduating in ${daysRemaining} days`}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+                        {label}
+                      </span>
+                      <span className="mt-1 block text-[13px] leading-5 text-neutral-950">
+                        {value}
+                      </span>
+                    </>
+                  )}
                 </div>
               ))}
               {snapshotProjects.map(([label, text, cta]) => (
@@ -1569,42 +1623,125 @@ function StatusIndicator({ label, value }: { label: string; value: string }) {
   );
 }
 
-function UptimeBadge({ minutes }: { minutes: number }) {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+function PortfolioStatusCard() {
+  const [estimatedSavings, setEstimatedSavings] = useState<number | null>(null);
+  const [savingsStatus, setSavingsStatus] = useState<"calculating" | "ready">("calculating");
+  const [availabilityLabel, setAvailabilityLabel] = useState("Calculating...");
+  const [runtimeError, setRuntimeError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let intervalId: number | null = null;
+
+    const loadStatus = async () => {
+      try {
+        const response = await fetch("/api/runtime", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("Runtime request failed");
+        }
+
+        const data = (await response.json()) as {
+          estimatedSavings?: number | null;
+          savingsStatus?: "calculating" | "ready";
+          availabilityLabel?: string;
+        };
+        if (cancelled) {
+          return;
+        }
+
+        setRuntimeError(false);
+        setSavingsStatus(data.savingsStatus === "ready" ? "ready" : "calculating");
+        setEstimatedSavings(
+          typeof data.estimatedSavings === "number" ? data.estimatedSavings : null,
+        );
+        setAvailabilityLabel(
+          typeof data.availabilityLabel === "string"
+            ? data.availabilityLabel
+            : "Calculating...",
+        );
+      } catch {
+        if (!cancelled) {
+          setRuntimeError(true);
+          setEstimatedSavings(null);
+          setAvailabilityLabel("Calculating...");
+        }
+      }
+    };
+
+    void loadStatus();
+    intervalId = window.setInterval(() => {
+      void loadStatus();
+    }, 30_000);
+
+    return () => {
+      cancelled = true;
+      if (intervalId !== null) {
+        window.clearInterval(intervalId);
+      }
+    };
+  }, []);
+
+  const savingsLabel = runtimeError
+    ? "Estimate unavailable"
+    : savingsStatus === "calculating" || estimatedSavings === null
+      ? "Calculating..."
+      : `${new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(estimatedSavings)} saved`;
 
   return (
-    <div className="group relative">
-      <div className="rounded-full border border-emerald-500/15 bg-emerald-50/45 px-3 py-1.5 shadow-sm backdrop-blur-2xl">
-        <span className="mr-2 text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-500">
-          Uptime
+    <aside className="group relative ml-auto w-fit max-w-full">
+      <div className="glass-float inline-flex items-center gap-2 rounded-full px-4 py-2 text-left">
+        <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-500">
+          Website Availability:
         </span>
-        <span className="font-mono text-[12px] font-semibold text-emerald-600">
-          {String(hours).padStart(2, "0")}h {String(remainingMinutes).padStart(2, "0")}m
+        <span className="text-[12px] font-semibold text-emerald-500">
+          {availabilityLabel}
         </span>
       </div>
-      <div className="pointer-events-none absolute right-0 top-[calc(100%+0.65rem)] z-30 w-72 translate-y-1 rounded-2xl border border-white/75 bg-sky-50/88 p-4 text-left opacity-0 shadow-[0_24px_70px_rgba(30,64,175,0.16)] backdrop-blur-3xl transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
-          Self-hosted system
+
+      <div className="pointer-events-none absolute right-0 top-[calc(100%+0.65rem)] z-30 w-80 translate-y-1 rounded-[22px] border border-white/75 bg-sky-50/88 p-4 text-left opacity-0 shadow-[0_24px_70px_rgba(30,64,175,0.16)] backdrop-blur-3xl transition duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+        <p className="text-[13px] leading-6 text-neutral-700">
+          This website runs on a private Ubuntu server I manage myself instead
+          of using a paid hosting service. It is deployed as a Dockerized
+          Next.js application, served through Caddy, and monitored with a
+          health check endpoint.
         </p>
-        <p className="mt-2 text-[13px] leading-6 text-neutral-700">
-          This portfolio is self-hosted on my personal server, which is one of my hobbies and a way I keep learning infrastructure by running real
-          services.
-        </p>
+
         <div className="mt-3 flex flex-wrap gap-2">
-          {["Next.js", "React", "TypeScript", "Tailwind CSS", "Docker", "Caddy"].map(
-            (tool) => (
-              <span
-                key={tool}
-                className="rounded-full border border-sky-900/8 bg-white/55 px-2.5 py-1 text-[11px] text-neutral-600"
-              >
-                {tool}
-              </span>
-            ),
-          )}
+          {[
+            "Next.js",
+            "Docker",
+            "Ubuntu",
+            "Caddy",
+            "Health Check",
+            "Private Server",
+          ].map((tool) => (
+            <span
+              key={tool}
+              className="rounded-full border border-sky-900/10 bg-white/60 px-2.5 py-1 text-[11px] font-medium text-neutral-700"
+            >
+              {tool}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-[18px] border border-emerald-500/12 bg-emerald-50/45 p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
+            Estimated Savings
+          </p>
+          <p className="mt-1 text-[13px] font-semibold text-emerald-500">
+            {savingsLabel}
+          </p>
+          <p className="mt-1 text-[11px] leading-5 text-neutral-600">
+            Based on runtime vs. similar cloud VPS.
+          </p>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
 
@@ -1640,9 +1777,11 @@ function InspectionPanel({
             >
               {panel.title}
             </h2>
-            <p className="mt-1 text-[14px] leading-6 text-neutral-500">
-              {panel.command}
-            </p>
+            {panel.command ? (
+              <p className="mt-1 text-[14px] leading-6 text-neutral-500">
+                {panel.command}
+              </p>
+            ) : null}
           </div>
           <button
             type="button"
@@ -1654,7 +1793,26 @@ function InspectionPanel({
           </button>
         </div>
         <div className="space-y-6 p-7 sm:p-10">
-          <p className="text-[19px] leading-9 text-neutral-700">{panel.summary}</p>
+          {Array.isArray(panel.summary) ? (
+            <ul className="space-y-2 pl-6 text-[19px] leading-9 text-neutral-700 list-disc">
+              {panel.summary.map((item) =>
+                typeof item === "string" ? (
+                  <li key={item}>{item}</li>
+                ) : (
+                  <li key={item.text}>
+                    {item.text}
+                    <ul className="mt-2 list-disc pl-6 text-[18px] leading-8 text-neutral-700">
+                      {item.children.map((child) => (
+                        <li key={child}>{child}</li>
+                      ))}
+                    </ul>
+                  </li>
+                ),
+              )}
+            </ul>
+          ) : (
+            <p className="text-[19px] leading-9 text-neutral-700">{panel.summary}</p>
+          )}
           <div className="grid gap-3 sm:grid-cols-2">
             {panel.sections.map((section) => (
               <div
@@ -1682,9 +1840,17 @@ function InspectionPanel({
                     </a>
                   </div>
                 ) : (
-                  <p className="mt-3 text-[17px] leading-8 text-neutral-600">
-                    {section.text}
-                  </p>
+                  Array.isArray(section.text) ? (
+                    <ul className="mt-3 list-disc space-y-1 pl-6 text-[17px] leading-8 text-neutral-600">
+                      {section.text.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-3 text-[17px] leading-8 text-neutral-600">
+                      {section.text}
+                    </p>
+                  )
                 )}
               </div>
             ))}
